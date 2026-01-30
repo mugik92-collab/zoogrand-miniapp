@@ -1,65 +1,134 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>ZooGrand73</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f6f6;
-      padding: 16px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .btn {
-      display: block;
-      text-align: center;
-      background: #4CAF50;
-      color: white;
-      padding: 12px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZooGrand Mini App</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --accent: #22c55e;
+  --accent-soft: #16a34a;
+  --text: #f9fafb;
+  --muted: #9ca3af;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- HEADER ---------- */
+header {
+  padding: 14px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+}
+.tab {
+  flex: 1;
+  background: #020617;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+}
+.tab.active {
+  background: var(--accent);
+  color: #052e16;
+  font-weight: 700;
+}
+
+/* ---------- CONTENT ---------- */
+.section {
+  display: none;
+  padding: 12px;
+  animation: fade .25s ease;
+}
+.section.active { display: block; }
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- CARDS ---------- */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.card h3 {
+  margin: 0 0 6px;
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  background: var(--accent);
+  color: #052e16;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  width: 100%;
+  cursor: pointer;
+}
+.counter {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.counter button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  font-size: 18px;
+}
+
+/* ---------- CART ---------- */
+.cart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #020617;
+  padding: 12px;
+  border-top: 1px solid #1f2933;
+}
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>🐾 ZooGrand73</h1>
+<header>ZooGrand 🐾</header>
 
-<div class="card">
-  <h3>🛏 Лежанки</h3>
-  <p>Мягкие, удобные, для кошек и собак</p>
-  <a class="btn" href="https://t.me/zoogrand73">Смотреть в канале</a>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('stay')">Передержка</div>
+  <div class="tab" onclick="showTab('beds')">Лежанки</div>
+  <div class="tab" onclick="showTab('snacks')">Вкусняшки</div>
 </div>
 
-<div class="card">
-  <h3>🍖 Вкусняшки</h3>
-  <p>Натуральные лакомства</p>
-  <a class="btn" href="https://t.me/zoogrand73">Перейти</a>
-</div>
-
-<div class="card">
-  <h3>📦 Заказать</h3>
-  <p>Написать менеджеру</p>
-  <a class="btn" href="https://t.me/zoogrand73">Написать</a>
-</div>
-
-<script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
-</script>
-
-</body>
-</html>
+<!-- ПЕРЕДЕРЖКА -->
+<div id="stay" class="section active">
+  <div class="car
