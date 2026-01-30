@@ -1,134 +1,139 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZooGrand Mini App</title>
+  <meta charset="UTF-8">
+  <title>ZooGrand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<style>
-:root {
-  --bg: #0f172a;
-  --card: #111827;
-  --accent: #22c55e;
-  --accent-soft: #16a34a;
-  --text: #f9fafb;
-  --muted: #9ca3af;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
 
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Inter, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+    }
 
-/* ---------- HEADER ---------- */
-header {
-  padding: 14px;
-  font-size: 20px;
-  font-weight: 700;
-}
+    .tab {
+      padding: 10px 14px;
+      background: #1e293b;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-/* ---------- TABS ---------- */
-.tabs {
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-}
-.tab {
-  flex: 1;
-  background: #020617;
-  padding: 10px;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s;
-}
-.tab.active {
-  background: var(--accent);
-  color: #052e16;
-  font-weight: 700;
-}
+    .tab.active {
+      background: #22c55e;
+      color: black;
+    }
 
-/* ---------- CONTENT ---------- */
-.section {
-  display: none;
-  padding: 12px;
-  animation: fade .25s ease;
-}
-.section.active { display: block; }
+    .section {
+      display: none;
+      padding: 16px;
+    }
 
-@keyframes fade {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .section.active {
+      display: block;
+    }
 
-/* ---------- CARDS ---------- */
-.card {
-  background: var(--card);
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 12px;
-}
-.card h3 {
-  margin: 0 0 6px;
-}
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
 
-/* ---------- BUTTONS ---------- */
-.btn {
-  background: var(--accent);
-  color: #052e16;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  width: 100%;
-  cursor: pointer;
-}
-.counter {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.counter button {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: none;
-  font-size: 18px;
-}
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
 
-/* ---------- CART ---------- */
-.cart {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #020617;
-  padding: 12px;
-  border-top: 1px solid #1f2933;
-}
-.cart-total {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-</style>
+    .price {
+      color: #22c55e;
+      margin-bottom: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #22c55e;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>ZooGrand 🐾</header>
-
 <div class="tabs">
-  <div class="tab active" onclick="showTab('stay')">Передержка</div>
-  <div class="tab" onclick="showTab('beds')">Лежанки</div>
-  <div class="tab" onclick="showTab('snacks')">Вкусняшки</div>
+  <div class="tab active" onclick="showTab('stay', this)">Передержка</div>
+  <div class="tab" onclick="showTab('beds', this)">Лежанки</div>
+  <div class="tab" onclick="showTab('snacks', this)">Вкусняшки</div>
 </div>
 
-<!-- ПЕРЕДЕРЖКА -->
 <div id="stay" class="section active">
-  <div class="car
+  <div class="card">
+    <h3>Передержка собаки</h3>
+    <div class="price">1000 ₽ / сутки</div>
+    <button onclick="add('Передержка', 1000)">Добавить</button>
+  </div>
+</div>
+
+<div id="beds" class="section">
+  <div class="card">
+    <h3>Лежанка «Комфорт»</h3>
+    <div class="price">1500 ₽</div>
+    <button onclick="add('Лежанка Комфорт', 1500)">Добавить</button>
+  </div>
+</div>
+
+<div id="snacks" class="section">
+  <div class="card">
+    <h3>Мясные вкусняшки</h3>
+    <div class="price">500 ₽</div>
+    <button onclick="add('Вкусняшки', 500)">Добавить</button>
+  </div>
+</div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+
+  let cart = [];
+
+  function showTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function add(name, price) {
+    cart.push({ name, price });
+    tg.showPopup({
+      title: "Добавлено",
+      message: name + " добавлено в корзину",
+      buttons: [{ type: "ok" }]
+    });
+  }
+
+  tg.MainButton.setText("Оформить заказ");
+  tg.MainButton.show();
+
+  tg.MainButton.onClick(() => {
+    tg.sendData(JSON.stringify(cart));
+  });
+</script>
+
+</body>
+</html>
