@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand — Товары и передержка</title>
+    <title>ZooGrand — Купить товары для собак с доставкой в Москве</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -32,6 +32,7 @@
         .subcategory-content { padding:1rem; }
         .price { color:var(--accent); font-weight:700; font-size:1.3rem; margin:0.5rem 0; }
         .desc { color:var(--gray); line-height:1.45; font-size:0.95rem; white-space:pre-wrap; }
+        .utp { font-weight:700; color:#27ae60; margin:0.5rem 0; font-size:1.05rem; }
 
         .qty-control { display:flex; align-items:center; gap:1rem; margin:1rem 0; justify-content:center; }
         .qty-btn { width:44px; height:44px; border-radius:50%; background:#eee; border:none; font-size:1.4rem; cursor:pointer; }
@@ -65,7 +66,7 @@
 </head>
 <body>
 
-<header>ZooGrand — Товары и передержка</header>
+<header>ZooGrand — Купить товары для собак в Москве: лежанки, лакомства, передержка</header>
 
 <div class="container">
 
@@ -138,20 +139,29 @@
     if (tg.colorScheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
     const products = [
-        // Лежанки — 5 подкатегорий
-        {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:1400, desc:"60×45 см, бортик 8–12 см\nХоллофайбер, Оксфорд 600D PU\nБюджетная, лёгкая, для мелких собак\nдо 15 кг\nСъёмный чехол: нет\nМашинная стирка: да (целиком)\nВодоотталкивающая пропитка: да\nАнтискользящее дно: да", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6807648889.jpg"},
-        {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, desc:"Диаметр 70–100 см, бортик 18–25 см\nХоллофайбер + силикон, Велюр / плюш\nУютная, для зарывания, мелкие–средние\nдо 30 кг\nСъёмный чехол: иногда\nМашинная стирка: только чехол\nВодоотталкивающая: нет\nАнтискользящее дно: да", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
-        {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, desc:"80×60 – 120×80 см, бортик 12–18 см\nОртопедическая пена HR + холлофайбер\nРип-стоп / флок\nДля суставов, пожилые, средние–крупные\nдо 50 кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 3500–9000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
-        {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, desc:"90×70 – 130×90 см, бортик 20–30 см\nОртопедическая пена + memory foam\nМикрофибра / замша с тефлоном\nРоскошь, интерьер, крупные\nдо 70 кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 5500–15000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
-        {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, desc:"120×90 – 160×110 см, бортик 5–10 см или без\nОртопедическая пена 10–15 см\nКордура / баллистический нейлон\nДля гигантов, моется шлангом, вольеры\n45+ кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 8000–25000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
+        // Лежанки — 5 подкатегорий с SEO-описаниями, УТП и картинками
+        {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:800, desc:"Купить лежанку для собаки овальной формы Эконом в Москве с доставкой. Размер 60×45 см, бортик 8–12 см, наполнитель холлофайбер, материал оксфорд 600D PU.\nДля мелких пород до 15 кг, бюджетный вариант для щенков.", utp:"Бюджетная и легкая лежанка для мелких собак — идеальный выбор для экономии без потери качества.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6807648889.jpg"},
+        {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, desc:"Купить лежанку пончик для собаки Классик в Москве. Диаметр 70–100 см, бортик 18–25 см, наполнитель холлофайбер + силикон, материал велюр/плюш.\nДля мелких и средних пород до 30 кг, уютное место для сна.", utp:"Уютная пончик-лежанка для собак — позволяет зарываться и чувствовать безопасность, как в норке.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
+        {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, desc:"Купить ортопедическую лежанку для собак в Москве. Размер 80×60 – 120×80 см, бортик 12–18 см, наполнитель ортопедическая пена HR + холлофайбер, материал рип-стоп/флок.\nДля суставов, пожилых, средних–крупных собак до 50 кг.", utp:"Ортопедическая лежанка для собак с проблемами суставов — обеспечивает поддержку и комфорт для пожилых питомцев.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
+        {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, desc:"Купить премиум лежанку-диван для собак в Москве. Размер 90×70 – 130×90 см, бортик 20–30 см, наполнитель ортопедическая пена + memory foam, материал микрофибра/замша с тефлоном.\nРоскошный вариант для интерьера, крупные породы до 70 кг.", utp:"Премиум диван-лежанка для собак — сочетает роскошь и комфорт, идеально вписывается в интерьер дома.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
+        {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, desc:"Купить гигантскую лежанку-матрас для крупных собак в Москве. Размер 120×90 – 160×110 см, бортик без/5–10 см, наполнитель ортопедическая пена 10–15 см, материал кордура/баллистический нейлон.\nДля гигантских пород 45+ кг, подходит для вольеров.", utp:"Гигантская матрас-лежанка для крупных собак — легко моется шлангом, идеальна для уличных вольеров.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
 
-        // Передержка — 6 подкатегорий
-        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йоркширский терьер, русский той-терьер, померанский шпиц (мини/той), мальтезе (мини), пражский крысарик, папильон (маленькие), мопс (мелкие), французский бульдог (очень мелкие)\nМогут жить по 4–8 в одном вольере, мало едят, часто агрессивны к крупным, склонны к травмам, много лают", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a"},
-        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–10(12) кг\nЙоркширский терьер (стандарт), померанский шпиц, ши-тцу, пекинес, мальтезе, той-пудель, кавалер кинг чарльз спаниель, бишон фризе, болоньез, японский хин, миниатюрный шнауцер, брюссельский гриффон\nСовместимы в группах, истеричны при разлуке, требуют частого вычесывания, склонны к зубным проблемам", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"},
-        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел-терьер, кокер-спаниель (американский/английский), бигль, бассет-хаунд, шелти (шелтландская овчарка), вельш-корги пемброк/кардиган, миниатюрный/карликовый пудель, басенджи, шиба-ину, такса (стандарт), французский бульдог (средние), бостон-терьер\nВысокая энергия, нуждаются в активном выгуле, много лают/воют, хорошая совместимость", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b"},
-        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–28(30) кг\nБультерьер, стаффордширский бультерьер, английский бульдог, бордер-колли, австралийская овчарка, колли (длинношерстная), хаски (мелкие/средние), лабрадор-ретривер (молодые/стройные), золотистый ретривер (стройные), эстонская гончая, английский кокер-спаниель, уиппет, далматин, сибирский хаски (средние), американский кокер-спаниель\nСамая проблемная группа по дракам, высокая возбудимость", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
-        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–45(50) кг\nНемецкая овчарка, лабрадор-ретривер, золотистый ретривер, ротвейлер, доберман, боксёр, ризеншнауцер, алабай (молодые/средние), сибирский хаски (крупные), маламут (средние), кане-корсо (стройные), немецкий дог (стройные), бернский зенненхунд (средние), колли (гладкошерстная), восточно-европейская овчарка\nОтдельный вольер почти всегда, сильный укус, территориальность", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45"},
-        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nКавказская овчарка, среднеазиатская овчарка (алабай взрослый), английский мастиф, немецкий дог, сенбернар, леонбергер, ньюфаундленд, ирландский волкодав, большой швейцарский зенненхунд, тибетский мастиф, кане-корсо (крупные), ротвейлер (очень крупные), московская сторожевая\nТолько отдельный вольер/выгул, огромный расход корма, очень сильные", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36"}
+        // Передержка — 6 подкатегорий с SEO, УТП и картинками
+        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"Передержка для мини собак в Москве: чихуахуа, йоркширский терьер, той-терьер. Рост до 28–30 см, вес до 3–5 кг.\nКомфортная гостиница для маленьких пород с индивидуальным подходом.", utp:"Групповая передержка до 8 собак в вольере — экономия и социализация для мини-пород.", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a"},
+        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"Передержка маленьких собак в Москве: ши-тцу, пекинес, той-пудель. Рост 28–40 см, вес 5–12 кг.\nПрофессиональный уход и вычесывание для пушистых пород.", utp:"Совместимая группа для маленьких собак — минимизируем стресс от разлуки с хозяином.", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"},
+        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"Передержка для маленьких-средних собак в Москве: джек-рассел, корги, такса. Рост 35–50 см, вес 10–18 кг.\nАктивные прогулки и игры для энергичных пород.", utp:"Высокая совместимость в паре-тройке — идеально для активных собак с ежедневным выгулом.", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b"},
+        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"Передержка средних собак в Москве: хаски, лабрадор, далматин. Рост 40–58 см, вес 15–30 кг.\nТщательная проверка совместимости для предотвращения драк.", utp:"Профессиональный контроль возбудимости — безопасная передержка для проблемных групп.", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
+        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"Передержка крупных собак в Москве: овчарка, ротвейлер, доберман. Рост 58–70 см, вес 28–50 кг.\nОтдельные вольеры для территориальных пород.", utp:"Индивидуальный вольер и нагрузки — для сильных кобелей с территориальностью.", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45"},
+        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"Передержка гигантских собак в Москве: алабай, мастиф, сенбернар. Рост 70+ см, вес 45–90+ кг.\nОтдельный выгул и усиленное питание.", utp:"Специальный уход для гигантов — большой расход корма и защита от разрушений.", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36"},
+
+        // Вкусняшки — 7 подкатегорий с SEO, УТП, картинками и скидкой от 500г
+        {id:19, category:"Вкусняшки", sub:"Легкое говяжье 100г", price:100, desc:"Купить сушеное легкое говяжье для собак в Москве. Натуральное лакомство 100 грамм для дрессировки щенков и взрослых собак.", utp:"Легкое и низкокалорийное лакомство — идеально для контроля веса и здоровья легких.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
+        {id:20, category:"Вкусняшки", sub:"Рубец говяжий 100г", price:100, desc:"Купить сушеный рубец говяжий для собак в Москве. 100 грамм натурального лакомства для улучшения пищеварения.", utp:"Богат ферментами рубец — улучшает микрофлору кишечника и пищеварение питомца.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
+        {id:21, category:"Вкусняшки", sub:"Вымя говяжье", price:110, desc:"Купить сушеное вымя говяжье для собак в Москве. Натуральное лакомство для укрепления зубов.", utp:"Плотное вымя — отличный натуральный грызунок для чистки зубов и десен.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
+        {id:22, category:"Вкусняшки", sub:"Трахея говяжья", price:130, desc:"Купить сушеную трахею говяжью для собак в Москве. Полезное лакомство для суставов.", utp:"Хондропротектор в форме трахеи — поддерживает суставы и хрящи крупных пород.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
+        {id:23, category:"Вкусняшки", sub:"Бычьи семенники", price:150, desc:"Купить сушеные бычьи семенники для собак в Москве. Высокобелковое лакомство.", utp:"Богатые тестостероном семенники — энергия и выносливость для активных собак.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
+        {id:24, category:"Вкусняшки", sub:"Бычий корень", price:230, desc:"Купить сушеный бычий корень для собак в Москве. Долговечный грызунок.", utp:"Твердый корень — идеальный для длительного жевания и снятия стресса.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
+        {id:25, category:"Вкусняшки", sub:"Говяжьи почки", price:100, desc:"Купить сушеные говяжьи почки для собак в Москве. Низкокалорийное лакомство.", utp:"Почки для детокса — очищают организм и поддерживают почки питомца.", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"}
     ];
 
     let cart = [];
@@ -162,7 +172,6 @@
         document.getElementById('categoryScreen').classList.remove('hidden');
         document.getElementById('categoryTitle').textContent = cat;
 
-        // Показываем подкатегории для Лежанок и Передержки
         document.getElementById('subcategoryGrid').classList.remove('hidden');
         document.getElementById('calcPanel').classList.add('hidden');
 
@@ -184,6 +193,7 @@
                 <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub}" onerror="this.src='https://via.placeholder.com/400x180?text=${item.sub}'">
                 <div class="subcategory-content">
                     <h3>${item.sub}</h3>
+                    <div class="utp">${item.utp}</div>
                     <div class="price">${item.price} ₽</div>
                     <div class="desc">${item.desc}</div>
                 </div>
@@ -200,9 +210,10 @@
         document.getElementById('calcTitle').textContent = item.sub;
 
         const isOverexposure = item.category === 'Передержка';
+        const isTreat = item.category === 'Вкусняшки';
 
         document.getElementById('dateFields').classList.toggle('hidden', !isOverexposure);
-        document.getElementById('nightsInfo').classList.toggle('hidden', !isOverexposure);
+        document.getElementById('nightsInfo').classList.toggle('hidden', !isOverexposure && !isTreat);
         document.getElementById('qtyPanel').classList.toggle('hidden', isOverexposure);
 
         if (isOverexposure) {
@@ -217,44 +228,58 @@
             document.getElementById('checkOut').onchange = updateCalc;
         } else {
             document.getElementById('qtyInput').value = 1;
+            updateCalc(); // для скидки на вкусняшки
         }
     }
 
     function updateCalc() {
-        if (currentItem.category !== 'Передержка') return;
+        let quantity = parseInt(document.getElementById('qtyInput').value) || 1;
+        let total = quantity * currentItem.price;
+        let discount = 0;
 
-        const inD = new Date(document.getElementById('checkIn').value);
-        const outD = new Date(document.getElementById('checkOut').value);
-        let nights = Math.max(1, Math.ceil((outD - inD) / 86400000));
-
-        let total = nights * currentItem.price;
-        let discount = nights >= 10 ? 0.1 : 0;
-        let final = total * (1 - discount);
-
-        document.getElementById('nightsCount').textContent = nights;
-        document.getElementById('calcPrice').textContent = final.toFixed(0) + ' ₽';
-        document.getElementById('discountBlock').classList.toggle('hidden', discount === 0);
+        if (currentItem.category === 'Передержка') {
+            const inD = new Date(document.getElementById('checkIn').value);
+            const outD = new Date(document.getElementById('checkOut').value);
+            quantity = Math.max(1, Math.ceil((outD - inD) / 86400000));
+            total = quantity * currentItem.price;
+            discount = quantity >= 10 ? 0.1 : 0;
+            document.getElementById('nightsCount').textContent = quantity;
+            document.getElementById('calcPrice').textContent = (total * (1 - discount)).toFixed(0) + ' ₽';
+            document.getElementById('discountBlock').textContent = 'Скидка 10% за 10+ суток!';
+            document.getElementById('discountBlock').classList.toggle('hidden', discount === 0);
+        } else if (currentItem.category === 'Вкусняшки') {
+            discount = quantity >= 5 ? 0.05 : 0; // от 500г (5 x 100г)
+            document.getElementById('nightsCount').textContent = quantity;
+            document.getElementById('calcPrice').textContent = (total * (1 - discount)).toFixed(0) + ' ₽';
+            document.getElementById('discountBlock').textContent = 'Скидка 5% от 500 грамм!';
+            document.getElementById('discountBlock').classList.toggle('hidden', discount === 0);
+        } else {
+            document.getElementById('discountBlock').classList.add('hidden');
+            document.getElementById('calcPrice').textContent = total.toFixed(0) + ' ₽';
+        }
     }
 
     function changeQty(delta) {
         const el = document.getElementById('qtyInput');
         let v = parseInt(el.value) || 1;
         el.value = Math.max(1, v + delta);
+        updateCalc();
     }
 
     function addToCartFromCalc() {
         if (!currentItem) return;
 
-        const isOver = currentItem.category === 'Передержка';
-        let quantity = isOver
-            ? parseInt(document.getElementById('nightsCount').textContent)
-            : parseInt(document.getElementById('qtyInput').value) || 1;
+        let quantity = parseInt(document.getElementById('qtyInput').value) || 1;
+
+        if (currentItem.category === 'Передержка') {
+            quantity = parseInt(document.getElementById('nightsCount').textContent);
+        }
 
         const entry = {
             product: currentItem,
             quantity,
-            checkIn: isOver ? document.getElementById('checkIn').value : null,
-            checkOut: isOver ? document.getElementById('checkOut').value : null
+            checkIn: currentItem.category === 'Передержка' ? document.getElementById('checkIn').value : null,
+            checkOut: currentItem.category === 'Передержка' ? document.getElementById('checkOut').value : null
         };
 
         const exist = cart.find(e => e.product.id === currentItem.id);
