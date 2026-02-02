@@ -1,169 +1,244 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand73 — Ульяновск</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; min-height:100vh; }
-        header { background:linear-gradient(135deg,#ff9800,#e67e22); color:white; text-align:center; padding:1rem; font-size:1.4rem; font-weight:700; }
-        .container { padding:1rem; padding-bottom:140px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZooGrand73</title>
 
-        .banner-container { position:relative; height:260px; margin-bottom:1rem; overflow:hidden; border-radius:0 0 20px 20px; box-shadow:0 6px 20px #0002; }
-        .main-banner { width:100%; height:100%; object-fit:cover; background:#eee; }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .category-grid { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin:1.5rem 0; }
-        .category-card { background:white; border-radius:16px; padding:1.2rem 1.6rem; text-align:center; box-shadow:0 4px 16px #0002; cursor:pointer; min-width:110px; transition:all 0.25s; }
-        .category-card:hover { transform:translateY(-6px) scale(1.04); box-shadow:0 12px 32px #0003; }
-        .category-card i { font-size:2.6rem; margin-bottom:0.6rem; color:#ff9800; }
+<style>
+body{
+    margin:0;
+    font-family:system-ui;
+    background:#f6f7f9;
+}
+header{
+    background:linear-gradient(135deg,#ff9800,#ffb347);
+    color:#fff;
+    padding:14px;
+    text-align:center;
+    font-size:1.4rem;
+    font-weight:800;
+}
+.container{padding:14px;padding-bottom:160px}
 
-        .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; }
-        .subcategory-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px #0002; cursor:pointer; transition:all 0.3s; display:flex; flex-direction:column; }
-        .subcategory-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px #0004; }
-        .subcategory-img { width:100%; height:180px; object-fit:cover; background:#eee; flex-shrink:0; }
-        .subcategory-content { padding:1rem; flex-grow:1; display:flex; flex-direction:column; justify-content:space-between; }
-        .price { color:#ff9800; font-weight:700; font-size:1.3rem; margin-top:auto; }
+.banner{
+    height:220px;
+    border-radius:0 0 22px 22px;
+    background:url("https://images.unsplash.com/photo-1601758123927-196ea9f3b2f5") center/cover;
+    box-shadow:0 8px 25px #0003;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
+}
+.banner h1{font-size:2rem;text-shadow:0 4px 12px #000}
 
-        .back-btn { background:#e0e0e0; color:#333; padding:0.8rem 1.4rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; margin-bottom:1rem; }
-        .hidden { display:none !important; }
+.categories{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-top:20px;
+}
+.cat{
+    background:#fff;
+    width:110px;
+    border-radius:18px;
+    text-align:center;
+    padding:14px;
+    box-shadow:0 6px 20px #0002;
+    cursor:pointer;
+}
+.cat img{
+    width:60px;
+    height:60px;
+    object-fit:cover;
+    border-radius:50%;
+    margin-bottom:6px;
+}
 
-        footer { position:fixed; bottom:60px; left:0; right:0; background:white; padding:12px; text-align:center; box-shadow:0 -2px 10px #0001; font-size:0.9rem; z-index:90; }
-        footer a { color:#ff9800; text-decoration:none; margin:0 8px; font-weight:600; }
-        .phone { color:#27ae60; font-weight:bold; }
-    </style>
+.hidden{display:none}
+
+.card{
+    background:#fff;
+    padding:14px;
+    border-radius:18px;
+    margin-bottom:12px;
+    box-shadow:0 6px 20px #0002;
+}
+
+button{
+    background:#ff9800;
+    border:none;
+    color:#fff;
+    padding:10px 14px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+input,textarea,select{
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    margin-bottom:8px;
+}
+
+#cart-bar{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:linear-gradient(135deg,#ff9800,#ffb347);
+    color:#fff;
+    padding:14px;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 20px #0003;
+    z-index:100;
+}
+</style>
 </head>
+
 <body>
 
-<header>ZooGrand73 — Ульяновск</header>
+<header>ZooGrand73 • Ульяновск</header>
 
 <div class="container">
 
-    <div id="mainScreen">
-        <div class="banner-container">
-            <img class="main-banner" src="https://picsum.photos/800/320?random=1" alt="Счастливые питомцы">
-            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; text-shadow:0 3px 10px #0008; z-index:2; width:90%;">
-                <div style="font-size:2.2rem; font-weight:900;">СЧАСТЛИВЫЕ ПИТОМЦЫ</div>
-                <div style="font-size:1.5rem; color:#ffe066;">– СЧАСТЛИВАЯ СЕМЬЯ!</div>
-            </div>
-        </div>
+<div class="banner">
+    <h1>Счастливые питомцы<br>— счастливая семья 🐾</h1>
+</div>
 
-        <div class="category-grid">
-            <div class="category-card" onclick="showCategory('Лежанки')"><i class="fas fa-bed"></i><div>Лежанки</div></div>
-            <div class="category-card" onclick="showCategory('Передержка')"><i class="fas fa-paw"></i><div>Передержка</div></div>
-            <div class="category-card" onclick="showCategory('Вкусняшки')"><i class="fas fa-bone"></i><div>Вкусняшки</div></div>
+<div id="main">
+    <div class="categories">
+        <div class="cat" onclick="openCat('Лежанки')">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">
+            Лежанки
+        </div>
+        <div class="cat" onclick="openCat('Передержка')">
+            <img src="https://cdn-icons-png.flaticon.com/512/194/194279.png">
+            Передержка
+        </div>
+        <div class="cat" onclick="openCat('Вкусняшки')">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+            Вкусняшки
         </div>
     </div>
+</div>
 
-    <div id="categoryScreen" class="hidden">
-        <button class="back-btn" onclick="backToMain()">← Назад</button>
-        <h2 id="categoryTitle"></h2>
+<div id="catalog" class="hidden">
+    <button onclick="back()">← Назад</button>
+    <h2 id="title"></h2>
+    <div id="items"></div>
 
-        <div id="subcategoryGrid" class="subcategory-grid"></div>
+    <h3>🐕 Данные питомца</h3>
+    <input id="petName" placeholder="Кличка">
+    <input id="petBreed" placeholder="Порода">
 
-        <div id="cartList"></div>
+    <h3>🏠 Адрес</h3>
+    <input id="address" placeholder="Адрес">
+
+    <h3>📅 Передержка</h3>
+    <input type="date" id="startDate">
+    <input type="number" id="days" placeholder="Кол-во суток">
+    <div style="display:flex;gap:6px">
+        <input type="time" id="checkIn">
+        <input type="time" id="checkOut">
     </div>
+
+    <h3>🧾 Комментарий</h3>
+    <textarea id="comment"></textarea>
+</div>
 
 </div>
 
 <div id="cart-bar" class="hidden">
-    <div>Корзина: <strong id="cartCount">0</strong> • <strong id="cartTotal">0 ₽</strong></div>
-    <div>
-        <button id="clearCartBtn">Очистить</button>
-        <button id="orderBtn">Оформить</button>
-    </div>
+    🛒 В корзине: <b id="cartTotal">0 ₽</b>
 </div>
 
-<footer>
-    <div>
-        <a href="https://t.me/zoogrand73">Telegram</a> • 
-        <a href="https://vk.com/zoogrand73">VK</a> • 
-        <a href="https://zoogrand73.tilda.ws">Сайт</a>
-    </div>
-    <div class="phone">📞 +7-999-190-10-89 (Зульфия)</div>
-</footer>
-
 <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready(); tg.expand();
+const tg = window.Telegram.WebApp;
+tg.ready(); tg.expand();
 
-    // Данные категорий (картинки — надёжные заглушки)
-    const categories = {
-        "Лежанки": [
-            {sub:"Лежанка-овал Эконом", price:800},
-            {sub:"Лежанка-пончик Классик", price:1200},
-            {sub:"Лежанка Ортопед", price:1400},
-            {sub:"Лежанка-дивана Премиум", price:1500},
-            {sub:"Лежанка-матрас Гигант", price:1600}
-        ],
-        "Передержка": [
-            {sub:"Мини / Той", price:650},
-            {sub:"Маленькие", price:900},
-            {sub:"Маленькие-средние", price:1100},
-            {sub:"Средние", price:1300},
-            {sub:"Крупные", price:1900},
-            {sub:"Очень крупные / Гиганты", price:3500}
-        ],
-        "Вкусняшки": [
-            {sub:"Легкое говяжье 100 г", price:100},
-            {sub:"Рубец говяжий 100 г", price:100},
-            {sub:"Вымя говяжье", price:110},
-            {sub:"Трахея говяжья", price:130},
-            {sub:"Бычьи семенники", price:150},
-            {sub:"Бычий корень", price:230},
-            {sub:"Говяжьи почки", price:100}
-        ]
-    };
+tg.MainButton.setText("🛒 Оформить заказ");
+tg.MainButton.color="#ffffff";
+tg.MainButton.textColor="#ff9800";
 
-    let cart = [];
+let cart=[];
 
-    function showCategory(cat) {
-        console.log("Открываем категорию:", cat); // отладка — открой F12 → Console
+const data={
+    "Лежанки":[
+        {n:"Лежанка Эконом",p:800},
+        {n:"Лежанка Премиум",p:1500}
+    ],
+    "Передержка":[
+        {n:"Передержка (сутки)",p:1200}
+    ],
+    "Вкусняшки":[
+        {n:"Легкое говяжье",p:100},
+        {n:"Рубец говяжий",p:100}
+    ]
+};
 
-        document.getElementById('mainScreen').classList.add('hidden');
-        document.getElementById('categoryScreen').classList.remove('hidden');
-        document.getElementById('categoryTitle').textContent = cat;
+function openCat(c){
+    main.classList.add("hidden");
+    catalog.classList.remove("hidden");
+    title.innerText=c;
+    items.innerHTML="";
+    data[c].forEach(i=>{
+        let el=document.createElement("div");
+        el.className="card";
 
-        const grid = document.getElementById('subcategoryGrid');
-        grid.innerHTML = ''; // очищаем
-
-        const items = categories[cat] || [];
-        if (items.length === 0) {
-            grid.innerHTML = '<p style="text-align:center;color:#999;">Пока товаров нет</p>';
-            return;
+        if(c==="Вкусняшки"){
+            el.innerHTML=`
+                <b>${i.n}</b>
+                <select onchange="addTreat('${i.n}',${i.p},this.value)">
+                    <option>100</option>
+                    <option>250</option>
+                    <option>500</option>
+                </select>`;
+        }else{
+            el.innerHTML=`<b>${i.n}</b><br>${i.p} ₽
+            <button onclick="add('${i.n}',${i.p},'${c}')">В корзину</button>`;
         }
+        items.appendChild(el);
+    });
+}
 
-        items.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'subcategory-card';
-            card.innerHTML = `
-                <img src="https://placehold.co/400x180/eee/333?text=${encodeURIComponent(item.sub)}" alt="${item.sub}">
-                <div class="subcategory-content">
-                    <h3>${item.sub}</h3>
-                    <div class="price">${item.price} ₽</div>
-                </div>
-            `;
-            card.onclick = () => alert(`Выбрано: ${item.sub} — ${item.price} ₽`);
-            grid.appendChild(card);
-        });
+function add(n,p,c){
+    cart.push({n,p,c});
+    update();
+}
 
-        updateCart();
-    }
+function addTreat(n,p,g){
+    cart.push({n:`${n} (${g} г)`,p:p*(g/100),c:"Вкусняшки"});
+    update();
+}
 
-    function backToMain() {
-        document.getElementById('categoryScreen').classList.add('hidden');
-        document.getElementById('mainScreen').classList.remove('hidden');
-    }
+function update(){
+    let total=cart.reduce((s,i)=>s+i.p,0);
+    let days=parseInt(days?.value||0);
+    if(days>10) total*=0.9;
+    cartTotal.innerText=Math.round(total)+" ₽";
+    cartBar.classList.remove("hidden");
+    tg.MainButton.show();
+}
 
-    function updateCart() {
-        const count = cart.length;
-        document.getElementById('cartCount').textContent = count;
-        document.getElementById('cartTotal').textContent = '0 ₽'; // пока корзина пустая
-        document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
-    }
-
-    updateCart();
+tg.MainButton.onClick(()=>{
+    let text=`🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n`;
+    cart.forEach((i,idx)=>text+=`${idx+1}. ${i.n} — ${i.p} ₽\n`);
+    text+=`\n🐕 ${petName.value} (${petBreed.value})
+🏠 ${address.value}
+📅 ${startDate.value} | ${days.value} суток
+⏰ ${checkIn.value} – ${checkOut.value}
+💬 ${comment.value}`;
+    tg.sendData(text);
+});
 </script>
+
 </body>
 </html>
