@@ -3,76 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand — Твой питомец в надёжных руках</title>
+    <title>ZooGrand — Передержка и товары</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInUp {
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-        .animate-fadeInUp:nth-child(1) { animation-delay: 0.1s; }
-        .animate-fadeInUp:nth-child(2) { animation-delay: 0.2s; }
-        .animate-fadeInUp:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-fadeInUp { animation:fadeInUp 0.6s ease-out forwards; }
 
         :root {
-            --bg: #f8f9fa; --card: #ffffff; --text: #333;
-            --accent: #ff9800; --accent-dark: #e68900;
-            --green: #4caf50; --gray: #757575; --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --danger: #f44336;
+            --bg:#f8f9fa; --card:#ffffff; --text:#2d2d2d; --accent:#ff9800; --accent-dark:#e67e22;
+            --green:#4caf50; --gray:#666; --danger:#e74c3c; --shadow:0 4px 16px rgba(0,0,0,0.08);
         }
-        [data-theme="dark"] {
-            --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --gray: #aaaaaa;
-        }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin:0; padding:0; background:var(--bg); color:var(--text); min-height:100vh; }
-        header { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color:white; text-align:center; padding:16px; font-size:1.4em; font-weight:600; }
-        .container { padding:16px; }
-        .category-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0; }
-        .category-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); text-align:center; padding:20px 10px; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; }
-        .category-card:hover { transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
-        .category-card i { font-size:2.8em; margin-bottom:12px; color:var(--accent); }
-        .product-grid { display:grid; grid-template-columns:1fr; gap:16px; }
-        .product-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); transition:transform 0.15s; }
-        .product-card:hover { transform:translateY(-6px); }
-        .product-img { width:100%; height:180px; object-fit:cover; }
-        .product-info { padding:12px; }
-        .product-title { font-size:1.1em; margin:0 0 6px; font-weight:600; }
-        .product-desc { font-size:0.85em; color:var(--gray); margin:0 0 10px; line-height:1.4; }
-        .price { font-weight:bold; color:var(--accent); font-size:1.1em; }
-        .qty-control { display:flex; align-items:center; gap:12px; margin:12px 0; }
-        .qty-btn { width:36px; height:36px; border-radius:50%; background:#eee; border:none; font-size:1.2em; cursor:pointer; }
-        .qty-input { width:50px; text-align:center; border:1px solid #ddd; border-radius:8px; padding:6px; }
-        .add-btn { background:var(--green); color:white; border:none; padding:10px 16px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%; transition:background 0.2s; }
-        .add-btn:hover { background:#43a047; }
-        #cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); box-shadow:0 -4px 12px rgba(0,0,0,0.1); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; z-index:100; }
-        #cart-bar.hidden { display:none; }
-        #orderBtn { background:var(--accent); color:white; border:none; padding:12px 24px; border-radius:12px; font-size:1.1em; font-weight:bold; cursor:pointer; }
-        .back-btn { background:#e0e0e0; color:#333; border:none; padding:10px 16px; border-radius:12px; cursor:pointer; margin-bottom:16px; font-weight:500; }
-        .hidden { display:none !important; }
+        [data-theme="dark"] { --bg:#111; --card:#1e1e1e; --text:#e0e0e0; --gray:#aaa; }
 
-        /* Свайп для удаления в корзине */
-        .cart-item { position:relative; overflow:hidden; transition:transform 0.3s ease; touch-action:pan-y; }
-        .cart-item.swiped { transform:translateX(-80px); }
-        .delete-btn { position:absolute; right:0; top:0; bottom:0; width:80px; background:var(--danger); color:white; display:flex; align-items:center; justify-content:center; font-size:1.2em; cursor:pointer; transform:translateX(100%); transition:transform 0.3s ease; }
-        .cart-item.swiped .delete-btn { transform:translateX(0); }
+        body { font-family:system-ui,sans-serif; margin:0; padding:0; background:var(--bg); color:var(--text); min-height:100vh; }
+        header { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:white; text-align:center; padding:1.2rem; font-size:1.5rem; font-weight:700; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+        .container { padding:1rem; }
+        .category-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin:1.5rem 0; }
+        .category-card { background:var(--card); border-radius:16px; padding:1.5rem 1rem; text-align:center; box-shadow:var(--shadow); cursor:pointer; transition:all 0.25s; }
+        .category-card:hover { transform:translateY(-6px); box-shadow:0 12px 24px rgba(0,0,0,0.12); }
+        .category-card i { font-size:2.8rem; margin-bottom:0.8rem; color:var(--accent); }
+        .category-card div { font-weight:600; font-size:1.1rem; }
 
-        /* Модалка комментария и дат */
-        #modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:200; }
-        .modal-content { background:var(--card); border-radius:16px; padding:24px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
-        .modal-title { font-size:1.3em; margin-bottom:16px; }
-        textarea, input[type="date"] { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px; font-size:1em; }
-        .modal-buttons { display:flex; gap:12px; margin-top:20px; }
-        .modal-btn { flex:1; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; }
+        .subcategory-grid, .product-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; margin:1.5rem 0; }
+        .subcategory-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); transition:transform 0.25s; cursor:pointer; }
+        .subcategory-card:hover { transform:translateY(-6px); }
+        .subcategory-img { width:100%; height:160px; object-fit:cover; }
+        .subcategory-content { padding:1rem; }
+        .price { color:var(--accent); font-weight:700; font-size:1.3rem; margin:0.5rem 0; }
+        .desc { color:var(--gray); line-height:1.45; font-size:0.95rem; white-space:pre-wrap; }
+
+        #cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); box-shadow:0 -4px 16px rgba(0,0,0,0.15); padding:0.8rem 1rem; display:flex; justify-content:space-between; align-items:center; z-index:100; font-weight:600; }
+        #clearCartBtn { background:var(--danger); color:white; border:none; padding:0.6rem 1.2rem; border-radius:10px; cursor:pointer; font-size:0.95rem; }
+
+        #cartList { margin:1rem 0; padding-bottom:4rem; } /* отступ под фиксированный бар */
+        .cart-item { background:var(--card); border-radius:12px; padding:1rem; margin-bottom:1rem; box-shadow:var(--shadow); position:relative; }
+        .cart-item-title { font-weight:600; margin-bottom:0.4rem; }
+        .cart-item-details { color:var(--gray); font-size:0.95rem; }
+        .cart-item-total { font-weight:700; color:var(--accent); margin-top:0.6rem; display:block; }
+
+        .back-btn, .add-btn { padding:0.8rem 1.4rem; border-radius:12px; cursor:pointer; font-weight:600; width:100%; margin:0.8rem 0; }
+        .back-btn { background:#e0e0e0; color:#333; border:none; }
+        .add-btn { background:var(--green); color:white; border:none; }
+
+        #orderModal { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; z-index:200; }
+        .modal-content { background:var(--card); border-radius:16px; padding:1.8rem; width:92%; max-width:420px; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+        textarea { width:100%; min-height:110px; padding:0.8rem; border:1px solid #ccc; border-radius:10px; margin:0.8rem 0; font-size:1rem; }
+        .modal-buttons { display:flex; gap:1rem; margin-top:1.5rem; }
+        .modal-btn { flex:1; padding:0.9rem; border-radius:12px; font-weight:600; cursor:pointer; }
         .confirm { background:var(--accent); color:white; border:none; }
         .cancel { background:#ccc; color:#333; border:none; }
+
+        .date-row { display:flex; flex-direction:column; gap:0.8rem; margin:1.2rem 0; }
+        input[type="date"] { padding:0.8rem; font-size:1rem; border:1px solid #ccc; border-radius:10px; }
+        .discount { color:#27ae60; font-weight:700; margin-top:0.6rem; font-size:1.05rem; }
+
+        .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-<header>ZooGrand — Забота о питомце</header>
+<header>ZooGrand — Передержка и товары</header>
 
 <div class="container">
 
@@ -87,132 +78,213 @@
     <div id="categoryScreen" class="hidden">
         <button class="back-btn" onclick="backToMain()">← Назад</button>
         <h2 id="categoryTitle"></h2>
+
+        <div id="subcategoryGrid" class="subcategory-grid"></div>
         <div id="productGrid" class="product-grid"></div>
+
+        <div id="calcPanel" class="hidden">
+            <h3 id="calcTitle"></h3>
+            <div class="date-row" id="dateFields">
+                <label>Заезд:</label><input type="date" id="checkIn">
+                <label>Выезд:</label><input type="date" id="checkOut">
+            </div>
+            <div id="nightsInfo" style="font-size:1.1rem;margin:1rem 0;">
+                Суток: <strong id="nightsCount">1</strong> • Сумма: <strong id="calcPrice">0 ₽</strong>
+            </div>
+            <div id="discountBlock" class="discount hidden">Скидка 10% за 10+ суток!</div>
+
+            <div class="qty-control" id="qtyPanel">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <input type="number" id="qtyInput" value="1" min="1">
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+
+            <button class="add-btn" onclick="addToCartFromCalc()">Добавить в корзину</button>
+        </div>
+
+        <!-- Визуальный список корзины -->
+        <div id="cartList"></div>
     </div>
 
 </div>
 
 <div id="cart-bar" class="hidden">
-    <div id="cart-summary">Корзина: <span id="cartCount">0</span> • <span id="cartTotal">0 руб.</span></div>
-    <button id="orderBtn" onclick="showOrderModal()">Оформить</button>
+    <div>Корзина: <strong id="cartCount">0</strong> • <strong id="cartTotal">0 ₽</strong></div>
+    <div>
+        <button id="clearCartBtn" onclick="clearCart()">Очистить</button>
+        <button id="orderBtn" onclick="showOrderModal()">Оформить</button>
+    </div>
 </div>
 
-<!-- Модальное окно оформления -->
-<div id="modal" class="hidden">
+<div id="orderModal" class="hidden">
     <div class="modal-content">
-        <div class="modal-title">Оформление заказа</div>
-        
-        <div id="dateSection" class="hidden">
-            <label>Заезд:</label>
-            <input type="date" id="checkIn" min="">
-            <label>Выезд:</label>
-            <input type="date" id="checkOut" min="">
-        </div>
-        
-        <label>Комментарий (не обязательно):</label>
-        <textarea id="comment" rows="4" placeholder="Особые пожелания, порода, кличка и т.д..."></textarea>
-        
+        <h3>Оформление заказа</h3>
+        <label>Комментарий / пожелания:</label>
+        <textarea id="orderComment" placeholder="Порода, кличка, аллергии, время приезда и т.д..."></textarea>
+
         <div class="modal-buttons">
-            <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
-            <button class="modal-btn confirm" onclick="confirmOrder()">Отправить</button>
+            <button class="modal-btn cancel" onclick="closeOrderModal()">Отмена</button>
+            <button class="modal-btn confirm" onclick="sendOrder()">Отправить</button>
         </div>
     </div>
 </div>
 
 <script>
     const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+    tg.ready(); tg.expand();
 
     if (tg.colorScheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
-    // Вставь сюда свой массив products из предыдущей версии
-    const products = [ /* ... полный массив с id, category, name, price, desc, imageUrl, unit ... */ ];
+    const products = [
+        // Передержка с картинками
+        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йоркширский терьер, русский той-терьер, померанский шпиц (мини/той), мальтезе (мини), пражский крысарик, папильон (маленькие), мопс (мелкие), французский бульдог (очень мелкие)\nМогут жить по 4–8 в одном вольере, мало едят, часто агрессивны к крупным, склонны к травмам, много лают", imageUrl:"https://www.rd.com/wp-content/uploads/2021/06/GettyImages-1205998407-e1624731290663.jpg"},
+        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–10(12) кг\nЙоркширский терьер (стандарт), померанский шпиц, ши-тцу, пекинес, мальтезе, той-пудель, кавалер кинг чарльз спаниель, бишон фризе, болоньез, японский хин, миниатюрный шнауцер, брюссельский гриффон\nСовместимы в группах, истеричны при разлуке, требуют частого вычесывания, склонны к зубным проблемам", imageUrl:"https://www.thesprucepets.com/thmb/bexogNDpWd6BQJiEKYHuSXX-ysc=/2779x0/filters:no_upscale():strip_icc()/GettyImages-94456490-e5e698281bd44ed99770988ac342c113.jpg"},
+        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел-терьер, кокер-спаниель (американский/английский), бигль, бассет-хаунд, шелти (шелтландская овчарка), вельш-корги пемброк/кардиган, миниатюрный/карликовый пудель, басенджи, шиба-ину, такса (стандарт), французский бульдог (средние), бостон-терьер\nВысокая энергия, нуждаются в активном выгуле, много лают/воют, хорошая совместимость", imageUrl:"https://www.omlet.us/images/cache/1024/681/Dog-Basenji-A_young,_brown_Basenji_lying_neatly_on_the_rocks.jpg"},
+        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–28(30) кг\nБультерьер, стаффордширский бультерьер, английский бульдог, бордер-колли, австралийская овчарка, колли (длинношерстная), хаски (мелкие/средние), лабрадор-ретривер (молодые/стройные), золотистый ретривер (стройные), эстонская гончая, английский кокер-спаниель, уиппет, далматин, сибирский хаски (средние), американский кокер-спаниель\nСамая проблемная группа по дракам, высокая возбудимость", imageUrl:"https://cmg-cmg-tv-10090-prod.cdn.arcpublishing.com/resizer/v2/6LYK2IF5WRINNIL5VTK4W3WJQ4.png?smart=true&auth=301c7f08a09f403fb0624eeb5b4d98f5b63e4cb1314af1dd93cae6e624067566&width=1010&height=568"},
+        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–45(50) кг\nНемецкая овчарка, лабрадор-ретривер, золотистый ретривер, ротвейлер, доберман, боксёр, ризеншнауцер, алабай (молодые/средние), сибирский хаски (крупные), маламут (средние), кане-корсо (стройные), немецкий дог (стройные), бернский зенненхунд (средние), колли (гладкошерстная), восточно-европейская овчарка\nОтдельный вольер почти всегда, сильный укус, территориальность", imageUrl:"https://worldanimalfoundation.org/wp-content/uploads/2023/10/large-dog-breeds-1024x706.jpg"},
+        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nКавказская овчарка, среднеазиатская овчарка (алабай взрослый), английский мастиф, немецкий дог, сенбернар, леонбергер, ньюфаундленд, ирландский волкодав, большой швейцарский зенненхунд, тибетский мастиф, кане-корсо (крупные), ротвейлер (очень крупные), московская сторожевая\nТолько отдельный вольер/выгул, огромный расход корма, очень сильные", imageUrl:"https://pethelpful.com/.image/w_1920,q_auto:good,c_limit/MTc0OTY5NDc5MDk1MzMwNzg0/10-largest-dog-breeds.jpg"}
+    ];
 
-    let cart = []; // [{product, quantity, checkIn?, checkOut?, nights?}]
+    let cart = [];
+    let currentItem = null;
 
-    function showCategory(category) {
+    function showCategory(cat) {
         document.getElementById('mainScreen').classList.add('hidden');
         document.getElementById('categoryScreen').classList.remove('hidden');
-        document.getElementById('categoryTitle').textContent = category;
+        document.getElementById('categoryTitle').textContent = cat;
 
-        const grid = document.getElementById('productGrid');
+        document.getElementById('subcategoryGrid').classList.add('hidden');
+        document.getElementById('productGrid').classList.add('hidden');
+        document.getElementById('calcPanel').classList.add('hidden');
+
+        if (cat === 'Передержка') {
+            document.getElementById('subcategoryGrid').classList.remove('hidden');
+            renderSubcategories();
+        } else {
+            document.getElementById('productGrid').innerHTML = '<p style="text-align:center;color:var(--gray);">Раздел в разработке</p>';
+            document.getElementById('productGrid').classList.remove('hidden');
+        }
+        renderCartList();
+    }
+
+    function renderSubcategories() {
+        const grid = document.getElementById('subcategoryGrid');
         grid.innerHTML = '';
-
-        products.filter(p => p.category === category).forEach((product, i) => {
+        products.forEach((item, i) => {
             const card = document.createElement('div');
-            card.className = 'product-card animate-fadeInUp';
-            card.style.animationDelay = `${i * 0.1}s`;
-            let extra = '';
-            if (category === 'Передержка') {
-                extra = `<small style="color:var(--accent);">Выберите даты при добавлении</small>`;
-            }
+            card.className = 'subcategory-card animate-fadeInUp';
+            card.style.animationDelay = `${i*0.12}s`;
             card.innerHTML = `
-                <img class="product-img" src="${product.imageUrl}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x180?text=${product.name}'">
-                <div class="product-info">
-                    <div class="product-title">${product.name}</div>
-                    <div class="product-desc">${product.desc}</div>
-                    <div class="price">${product.price} ₽ / ${product.unit}</div>
-                    ${extra}
-                    <div class="qty-control">
-                        <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
-                        <input type="number" class="qty-input" value="1" min="1" data-id="${product.id}">
-                        <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
-                    </div>
-                    <button class="add-btn" onclick="addToCart(${product.id})">В корзину</button>
+                <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub}" onerror="this.src='https://via.placeholder.com/400x160?text=${item.sub}'">
+                <div class="subcategory-content">
+                    <h3>${item.sub}</h3>
+                    <div class="price">${item.price} ₽ / сутки</div>
+                    <div class="desc">${item.desc}</div>
                 </div>
             `;
+            card.onclick = () => openCalculator(item);
             grid.appendChild(card);
         });
     }
 
-    function changeQty(btn, delta) {
-        const input = btn.parentElement.querySelector('.qty-input');
-        let val = parseInt(input.value) || 1;
-        input.value = Math.max(1, val + delta);
+    function openCalculator(item) {
+        currentItem = item;
+        document.getElementById('subcategoryGrid').classList.add('hidden');
+        document.getElementById('calcPanel').classList.remove('hidden');
+        document.getElementById('calcTitle').textContent = item.sub + ' — передержка';
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkIn').value = today;
+        document.getElementById('checkIn').min = today;
+        document.getElementById('checkOut').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        document.getElementById('checkOut').min = today;
+
+        document.getElementById('qtyPanel').classList.add('hidden');
+        updateCalc();
+        document.getElementById('checkIn').onchange = updateCalc;
+        document.getElementById('checkOut').onchange = updateCalc;
     }
 
-    function addToCart(id) {
-        const product = products.find(p => p.id === id);
-        const input = document.querySelector(`input[data-id="${id}"]`);
-        let quantity = parseInt(input.value) || 1;
-        let extraData = {};
+    function updateCalc() {
+        const inD = new Date(document.getElementById('checkIn').value);
+        const outD = new Date(document.getElementById('checkOut').value);
+        let nights = Math.max(1, Math.ceil((outD - inD) / (1000*60*60*24)));
 
-        if (product.category === 'Передержка') {
-            // Показываем даты только для передержки
-            const checkIn = prompt("Дата заезда (YYYY-MM-DD):") || new Date().toISOString().split('T')[0];
-            const checkOut = prompt("Дата выезда (YYYY-MM-DD):") || new Date(Date.now() + 86400000).toISOString().split('T')[0];
-            
-            const inDate = new Date(checkIn);
-            const outDate = new Date(checkOut);
-            const nights = Math.max(1, Math.ceil((outDate - inDate) / 86400000));
-            
-            quantity = nights; // Кол-во = кол-во суток
-            extraData = { checkIn, checkOut, nights };
-        }
+        let total = nights * currentItem.price;
+        let discount = nights >= 10 ? 0.1 : 0;
+        let final = total * (1 - discount);
 
-        const existing = cart.find(item => item.product.id === id);
-        if (existing) {
-            existing.quantity += quantity;
-            if (extraData.nights) existing.extra = extraData;
-        } else {
-            cart.push({ product, quantity, extra: extraData });
-        }
+        document.getElementById('nightsCount').textContent = nights;
+        document.getElementById('calcPrice').textContent = final.toFixed(0) + ' ₽';
+        document.getElementById('discountBlock').classList.toggle('hidden', discount === 0);
+    }
 
-        input.value = 1;
+    function changeQty(delta) {
+        const el = document.getElementById('qtyInput');
+        let v = parseInt(el.value) || 1;
+        el.value = Math.max(1, v + delta);
+    }
+
+    function addToCartFromCalc() {
+        if (!currentItem) return;
+
+        let quantity = parseInt(document.getElementById('nightsCount')?.textContent) || parseInt(document.getElementById('qtyInput')?.value) || 1;
+
+        const entry = {
+            product: currentItem,
+            quantity,
+            checkIn: document.getElementById('checkIn')?.value || null,
+            checkOut: document.getElementById('checkOut')?.value || null
+        };
+
+        const exist = cart.find(e => e.product.id === currentItem.id);
+        if (exist) exist.quantity += quantity;
+        else cart.push(entry);
+
+        tg.showPopup({message: `Добавлено: ${quantity} × ${currentItem.sub}`});
         updateCart();
-        tg.showPopup({message: `Добавлено: ${quantity} × ${product.name}`});
+        renderCartList();
+        backToMain();
+    }
+
+    function renderCartList() {
+        const list = document.getElementById('cartList');
+        list.innerHTML = '';
+        if (cart.length === 0) {
+            list.innerHTML = '<p style="text-align:center;color:var(--gray);">Корзина пуста</p>';
+            return;
+        }
+
+        cart.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            let details = `${item.quantity} × ${item.product.sub || item.product.name}`;
+            if (item.checkIn) details += ` (${item.checkIn} → ${item.checkOut})`;
+            div.innerHTML = `
+                <div class="cart-item-title">${item.product.sub || item.product.name}</div>
+                <div class="cart-item-details">${details}</div>
+                <span class="cart-item-total">${(item.quantity * item.product.price).toFixed(0)} ₽</span>
+            `;
+            list.appendChild(div);
+        });
     }
 
     function updateCart() {
-        let count = cart.reduce((sum, item) => sum + item.quantity, 0);
-        let total = cart.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
+        let count = cart.reduce((s, e) => s + e.quantity, 0);
+        let total = cart.reduce((s, e) => s + e.quantity * e.product.price, 0);
 
         document.getElementById('cartCount').textContent = count;
-        document.getElementById('cartTotal').textContent = total + ' ₽';
+        document.getElementById('cartTotal').textContent = total.toFixed(0) + ' ₽';
         document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
+        renderCartList();
+    }
 
-        // Здесь можно обновить визуальный список корзины, если хочешь полный список
+    function clearCart() {
+        if (confirm('Очистить корзину?')) {
+            cart = [];
+            updateCart();
+            tg.showPopup({message: 'Корзина очищена'});
+        }
     }
 
     function backToMain() {
@@ -221,61 +293,35 @@
     }
 
     function showOrderModal() {
-        document.getElementById('modal').classList.remove('hidden');
-        // Если в корзине есть Передержка — показываем даты (но уже выбраны при добавлении)
-        const hasOverexposure = cart.some(item => item.product.category === 'Передержка');
-        document.getElementById('dateSection').classList.toggle('hidden', !hasOverexposure);
+        document.getElementById('orderModal').classList.remove('hidden');
     }
 
-    function closeModal() {
-        document.getElementById('modal').classList.add('hidden');
+    function closeOrderModal() {
+        document.getElementById('orderModal').classList.add('hidden');
     }
 
-    function confirmOrder() {
-        const comment = document.getElementById('comment').value.trim();
-        let text = 'Заказ в ZooGrand:\n\n';
-        let total = 0;
+    function sendOrder() {
+        const comment = document.getElementById('orderComment').value.trim();
+        let text = 'Новый заказ в ZooGrand\n\n';
 
         cart.forEach(item => {
-            const sub = item.quantity * item.product.price;
-            let line = `${item.product.name} × ${item.quantity} ${item.product.unit} — ${sub} ₽`;
-            if (item.extra?.checkIn) {
-                line += ` (заезд: ${item.extra.checkIn}, выезд: ${item.extra.checkOut})`;
-            }
+            let line = `${item.product.sub || item.product.name} × ${item.quantity} сут.`;
+            if (item.checkIn) line += ` (${item.checkIn} → ${item.checkOut})`;
             text += line + '\n';
-            total += sub;
         });
-        text += `\nИтого: ${total} ₽`;
+
+        let sum = cart.reduce((s, e) => s + e.quantity * e.product.price, 0);
+        text += `\nИтого: ${sum} ₽`;
         if (comment) text += `\n\nКомментарий: ${comment}`;
 
         tg.sendData(text);
-        tg.showAlert('Заказ отправлен! Скоро свяжемся.');
+        tg.showAlert('Заказ отправлен! Мы скоро свяжемся.');
         cart = [];
         updateCart();
-        closeModal();
+        closeOrderModal();
     }
 
-    // Свайп для удаления (добавь в updateCart визуализацию корзины если нужно)
-    // Пока реализовано только на уровне стилей — для полноценного списка корзины добавь div#cartList
-    document.addEventListener('touchstart', handleTouchStart, false);
-    document.addEventListener('touchmove', handleTouchMove, false);
-    document.addEventListener('touchend', handleTouchEnd, false);
-
-    let xDown = null;
-    function handleTouchStart(evt) { xDown = evt.touches[0].clientX; }
-    function handleTouchMove(evt) {
-        if (!xDown) return;
-        let xDiff = xDown - evt.touches[0].clientX;
-        if (xDiff > 50) { // свайп влево
-            const item = evt.target.closest('.cart-item');
-            if (item) item.classList.add('swiped');
-        }
-    }
-    function handleTouchEnd() {
-        xDown = null;
-    }
-
-    // Для удаления — добавь onclick на .delete-btn в будущем списке корзины
+    // Инициализация
     updateCart();
 </script>
 </body>
