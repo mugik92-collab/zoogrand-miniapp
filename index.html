@@ -3,40 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand73 — Передержка, лежанки и лакомства для собак в Ульяновске</title>
+    <title>ZooGrand73 — Ульяновск</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; min-height:100vh; }
+        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; }
         header { background:linear-gradient(135deg,#ff9800,#e67e22); color:white; text-align:center; padding:1rem; font-size:1.4rem; font-weight:700; }
         .container { padding:1rem; padding-bottom:140px; }
 
-        .banner-container { position:relative; height:300px; margin-bottom:1.5rem; overflow:hidden; border-radius:0 0 24px 24px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+        .banner-container { position:relative; height:260px; margin-bottom:1rem; overflow:hidden; border-radius:0 0 20px 20px; box-shadow:0 6px 20px #0002; }
         .main-banner { width:100%; height:100%; object-fit:cover; }
 
-        .banner-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; text-shadow:0 3px 10px #0008; z-index:2; }
-        .banner-title { font-size:2.2rem; font-weight:900; margin:0; animation:textSlideTop 1s ease-out forwards 0.8s; opacity:0; }
-        .banner-subtitle { font-size:1.5rem; font-weight:700; color:#ffe066; animation:textSlideBottom 1s ease-out forwards 1.2s; opacity:0; }
-
-        @keyframes textSlideTop { 0% { opacity:0; transform:translateY(-40px); } 100% { opacity:1; transform:translateY(0); } }
-        @keyframes textSlideBottom { 0% { opacity:0; transform:translateY(40px); } 100% { opacity:1; transform:translateY(0); } }
-
         .category-grid { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin:1.5rem 0; }
-        .category-card { background:white; border-radius:16px; padding:1.2rem 1.6rem; text-align:center; box-shadow:0 4px 16px #0002; cursor:pointer; min-width:120px; transition:all 0.25s; }
-        .category-card:hover { transform:translateY(-8px) scale(1.05); box-shadow:0 12px 32px #0003; }
+        .category-card { background:white; border-radius:16px; padding:1.2rem 1.6rem; text-align:center; box-shadow:0 4px 16px #0002; cursor:pointer; min-width:110px; transition:all 0.25s; }
+        .category-card:hover { transform:translateY(-6px) scale(1.04); box-shadow:0 12px 32px #0003; }
         .category-card i { font-size:2.6rem; margin-bottom:0.6rem; color:#ff9800; }
 
         .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; }
         .subcategory-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px #0002; cursor:pointer; transition:all 0.3s; }
         .subcategory-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px #0004; }
-        .subcategory-img { width:100%; height:180px; object-fit:cover; }
+        .subcategory-img { width:100%; height:180px; object-fit:cover; background:#eee; }
         .subcategory-content { padding:1rem; }
         .price { color:#ff9800; font-weight:700; font-size:1.3rem; }
-        .utp { color:#27ae60; font-weight:700; margin:0.5rem 0; }
 
-        .back-btn, .add-btn, .qty-btn, #orderBtn, #clearCartBtn, .modal-btn { cursor:pointer; border:none; border-radius:12px; padding:0.8rem 1.4rem; font-weight:600; transition:all 0.2s; }
-        .add-btn { background:#4caf50; color:white; width:100%; }
+        .back-btn, .add-btn { padding:0.8rem 1.4rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; }
         .back-btn { background:#e0e0e0; color:#333; }
+        .add-btn { background:#4caf50; color:white; width:100%; }
 
         #cart-bar { position:fixed; bottom:0; left:0; right:0; background:white; box-shadow:0 -4px 16px #0002; padding:0.8rem 1rem; display:flex; justify-content:space-between; align-items:center; z-index:100; }
         #cartList { margin:1rem 0; padding-bottom:5rem; }
@@ -56,12 +48,11 @@
     <div id="mainScreen">
         <div class="banner-container">
             <img class="main-banner" 
-                 src="https://files.catbox.moe/3m4j1k.jpg" 
-                 alt="Счастливые питомцы" 
-                 loading="eager">
-            <div class="banner-text">
-                <div class="banner-title">СЧАСТЛИВЫЕ ПИТОМЦЫ</div>
-                <div class="banner-subtitle">– СЧАСТЛИВАЯ СЕМЬЯ!</div>
+                 src="https://picsum.photos/800/320?random=1" 
+                 alt="Счастливые питомцы">
+            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; text-shadow:0 3px 10px #0008; z-index:2;">
+                <div style="font-size:2.2rem; font-weight:900;">СЧАСТЛИВЫЕ ПИТОМЦЫ</div>
+                <div style="font-size:1.5rem; color:#ffe066;">– СЧАСТЛИВАЯ СЕМЬЯ!</div>
             </div>
         </div>
 
@@ -75,11 +66,9 @@
     <div id="categoryScreen" class="hidden">
         <button class="back-btn" onclick="backToMain()">← Назад</button>
         <h2 id="categoryTitle"></h2>
+
         <div id="subcategoryGrid" class="subcategory-grid"></div>
-        <div id="calcPanel" class="hidden">
-            <h3 id="calcTitle"></h3>
-            <!-- ... калькулятор ... -->
-        </div>
+
         <div id="cartList"></div>
     </div>
 
@@ -93,22 +82,76 @@
     </div>
 </div>
 
-<footer>
-    <div>
-        <a href="https://t.me/zoogrand73">Telegram</a> • 
-        <a href="https://vk.com/zoogrand73">VK</a> • 
-        <a href="https://zoogrand73.tilda.ws">Сайт</a>
-    </div>
-    <div class="phone">📞 +7-999-190-10-89 (Зульфия)</div>
-</footer>
-
 <script>
-    // ... весь ваш предыдущий JavaScript-код остаётся без изменений ...
+    const tg = window.Telegram.WebApp;
+    tg.ready(); tg.expand();
 
-    // Добавляем класс loaded после загрузки баннера
-    const banner = document.querySelector('.main-banner');
-    banner.onload = () => banner.classList.add('loaded');
-    if (banner.complete) banner.classList.add('loaded');
+    const categories = {
+        "Лежанки": [
+            {sub:"Лежанка-овал Эконом", price:800, image:"https://picsum.photos/400/180?random=1"},
+            {sub:"Лежанка-пончик Классик", price:1200, image:"https://picsum.photos/400/180?random=2"},
+            {sub:"Лежанка Ортопед", price:1400, image:"https://picsum.photos/400/180?random=3"},
+            {sub:"Лежанка-дивана Премиум", price:1500, image:"https://picsum.photos/400/180?random=4"},
+            {sub:"Лежанка-матрас Гигант", price:1600, image:"https://picsum.photos/400/180?random=5"}
+        ],
+        "Передержка": [
+            {sub:"Мини / Той", price:650, image:"https://picsum.photos/400/180?random=6"},
+            {sub:"Маленькие", price:900, image:"https://picsum.photos/400/180?random=7"},
+            {sub:"Маленькие-средние", price:1100, image:"https://picsum.photos/400/180?random=8"},
+            {sub:"Средние", price:1300, image:"https://picsum.photos/400/180?random=9"},
+            {sub:"Крупные", price:1900, image:"https://picsum.photos/400/180?random=10"},
+            {sub:"Очень крупные / Гиганты", price:3500, image:"https://picsum.photos/400/180?random=11"}
+        ],
+        "Вкусняшки": [
+            {sub:"Легкое говяжье 100 г", price:100, image:"https://picsum.photos/400/180?random=12"},
+            {sub:"Рубец говяжий 100 г", price:100, image:"https://picsum.photos/400/180?random=13"},
+            {sub:"Вымя говяжье", price:110, image:"https://picsum.photos/400/180?random=14"},
+            {sub:"Трахея говяжья", price:130, image:"https://picsum.photos/400/180?random=15"},
+            {sub:"Бычьи семенники", price:150, image:"https://picsum.photos/400/180?random=16"},
+            {sub:"Бычий корень", price:230, image:"https://picsum.photos/400/180?random=17"},
+            {sub:"Говяжьи почки", price:100, image:"https://picsum.photos/400/180?random=18"}
+        ]
+    };
+
+    let cart = [];
+
+    function showCategory(cat) {
+        document.getElementById('mainScreen').classList.add('hidden');
+        document.getElementById('categoryScreen').classList.remove('hidden');
+        document.getElementById('categoryTitle').textContent = cat;
+
+        const grid = document.getElementById('subcategoryGrid');
+        grid.innerHTML = '';
+
+        (categories[cat] || []).forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'subcategory-card';
+            card.innerHTML = `
+                <img src="${item.image}" style="width:100%;height:180px;object-fit:cover;">
+                <div class="subcategory-content">
+                    <h3>${item.sub}</h3>
+                    <div class="price">${item.price} ₽</div>
+                </div>
+            `;
+            card.onclick = () => alert(`Выбрано: ${item.sub} за ${item.price} ₽`);
+            grid.appendChild(card);
+        });
+
+        updateCart();
+    }
+
+    function backToMain() {
+        document.getElementById('categoryScreen').classList.add('hidden');
+        document.getElementById('mainScreen').classList.remove('hidden');
+    }
+
+    function updateCart() {
+        const count = cart.reduce((s, e) => s + e.quantity, 0);
+        const total = cart.reduce((s, e) => s + e.quantity * e.price, 0);
+        document.getElementById('cartCount').textContent = count;
+        document.getElementById('cartTotal').textContent = total.toFixed(0) + ' ₽';
+        document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
+    }
 
     updateCart();
 </script>
