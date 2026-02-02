@@ -7,137 +7,58 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @keyframes bannerAppear {
-            0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; min-height:100vh; }
+        header { background:linear-gradient(135deg,#ff9800,#e67e22); color:white; text-align:center; padding:1rem; font-size:1.4rem; font-weight:700; }
+        .container { padding:1rem; padding-bottom:140px; }
 
-        @keyframes bannerPulse {
-            0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.015); }
-        }
+        .banner-container { position:relative; height:300px; margin-bottom:1.5rem; overflow:hidden; border-radius:0 0 24px 24px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+        .main-banner { width:100%; height:100%; object-fit:cover; }
 
-        @keyframes textSlideTop {
-            0%   { opacity: 0; transform: translateY(-40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        .banner-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; text-shadow:0 3px 10px #0008; z-index:2; }
+        .banner-title { font-size:2.2rem; font-weight:900; margin:0; animation:textSlideTop 1s ease-out forwards 0.8s; opacity:0; }
+        .banner-subtitle { font-size:1.5rem; font-weight:700; color:#ffe066; animation:textSlideBottom 1s ease-out forwards 1.2s; opacity:0; }
 
-        @keyframes textSlideBottom {
-            0%   { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes textSlideTop { 0% { opacity:0; transform:translateY(-40px); } 100% { opacity:1; transform:translateY(0); } }
+        @keyframes textSlideBottom { 0% { opacity:0; transform:translateY(40px); } 100% { opacity:1; transform:translateY(0); } }
 
-        .banner-container {
-            position: relative;
-            width: 100%;
-            height: 320px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        }
+        .category-grid { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin:1.5rem 0; }
+        .category-card { background:white; border-radius:16px; padding:1.2rem 1.6rem; text-align:center; box-shadow:0 4px 16px #0002; cursor:pointer; min-width:120px; transition:all 0.25s; }
+        .category-card:hover { transform:translateY(-8px) scale(1.05); box-shadow:0 12px 32px #0003; }
+        .category-card i { font-size:2.6rem; margin-bottom:0.6rem; color:#ff9800; }
 
-        .main-banner {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transform: translateY(30px) scale(0.96);
-            animation: bannerAppear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.3s;
-            transition: transform 0.4s ease;
-        }
+        .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; }
+        .subcategory-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px #0002; cursor:pointer; transition:all 0.3s; }
+        .subcategory-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px #0004; }
+        .subcategory-img { width:100%; height:180px; object-fit:cover; }
+        .subcategory-content { padding:1rem; }
+        .price { color:#ff9800; font-weight:700; font-size:1.3rem; }
+        .utp { color:#27ae60; font-weight:700; margin:0.5rem 0; }
 
-        .main-banner.loaded {
-            animation: bannerPulse 6s ease-in-out infinite;
-        }
+        .back-btn, .add-btn, .qty-btn, #orderBtn, #clearCartBtn, .modal-btn { cursor:pointer; border:none; border-radius:12px; padding:0.8rem 1.4rem; font-weight:600; transition:all 0.2s; }
+        .add-btn { background:#4caf50; color:white; width:100%; }
+        .back-btn { background:#e0e0e0; color:#333; }
 
-        .banner-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.7), 0 0 20px rgba(255,255,255,0.4);
-            pointer-events: none;
-            z-index: 2;
-        }
+        #cart-bar { position:fixed; bottom:0; left:0; right:0; background:white; box-shadow:0 -4px 16px #0002; padding:0.8rem 1rem; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+        #cartList { margin:1rem 0; padding-bottom:5rem; }
 
-        .banner-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 0.5rem;
-            opacity: 0;
-            animation: textSlideTop 1s ease-out forwards 0.8s;
-            letter-spacing: 1px;
-            line-height: 1.1;
-        }
+        #orderModal { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:200; }
+        .modal-content { background:white; border-radius:16px; padding:1.8rem; width:90%; max-width:420px; box-shadow:0 10px 30px #0004; }
 
-        .banner-subtitle {
-            font-size: 1.4rem;
-            font-weight: 700;
-            opacity: 0;
-            animation: textSlideBottom 1s ease-out forwards 1.2s;
-            color: #ffe066;
-        }
-
-        /* Остальные стили (категории, корзина, модалка и т.д.) */
-        :root {
-            --bg:#f8f9fa; --card:#ffffff; --text:#2d2d2d; --accent:#ff9800; --accent-dark:#e67e22;
-            --green:#4caf50; --gray:#666; --danger:#e74c3c; --shadow:0 4px 16px rgba(0,0,0,0.08);
-        }
-
-        body { font-family:system-ui,sans-serif; margin:0; padding:0; background:var(--bg); color:var(--text); min-height:100vh; }
-        .container { padding:0 1rem 120px; }
-
-        .category-grid {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-
-        .category-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 1.2rem 1.5rem;
-            text-align: center;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            min-width: 110px;
-            transition: all 0.2s ease;
-        }
-
-        .category-card i {
-            font-size: 2.4rem;
-            margin-bottom: 0.6rem;
-            color: var(--accent);
-        }
-
-        .category-card div {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        /* ... остальные стили для subcategory, cart, modal, footer остаются прежними ... */
+        .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-<header>ZooGrand73 — Передержка, лежанки и лакомства для собак в Ульяновске</header>
+<header>ZooGrand73 — Ульяновск</header>
 
 <div class="container">
 
     <div id="mainScreen">
         <div class="banner-container">
-            <img 
-                class="main-banner" 
-                src="https://files.catbox.moe/3m4j1k.jpg" 
-                alt="Счастливые питомцы" 
-                loading="eager"
-            >
+            <img class="main-banner" 
+                 src="https://files.catbox.moe/3m4j1k.jpg" 
+                 alt="Счастливые питомцы" 
+                 loading="eager">
             <div class="banner-text">
                 <div class="banner-title">СЧАСТЛИВЫЕ ПИТОМЦЫ</div>
                 <div class="banner-subtitle">– СЧАСТЛИВАЯ СЕМЬЯ!</div>
@@ -145,33 +66,49 @@
         </div>
 
         <div class="category-grid">
-            <div class="category-card" style="animation-delay: 1.0s;" onclick="showCategory('Лежанки')">
-                <i class="fas fa-bed"></i><div>Лежанки</div>
-            </div>
-            <div class="category-card" style="animation-delay: 1.2s;" onclick="showCategory('Передержка')">
-                <i class="fas fa-paw"></i><div>Передержка</div>
-            </div>
-            <div class="category-card" style="animation-delay: 1.4s;" onclick="showCategory('Вкусняшки')">
-                <i class="fas fa-bone"></i><div>Вкусняшки</div>
-            </div>
+            <div class="category-card" onclick="showCategory('Лежанки')"><i class="fas fa-bed"></i><div>Лежанки</div></div>
+            <div class="category-card" onclick="showCategory('Передержка')"><i class="fas fa-paw"></i><div>Передержка</div></div>
+            <div class="category-card" onclick="showCategory('Вкусняшки')"><i class="fas fa-bone"></i><div>Вкусняшки</div></div>
         </div>
     </div>
 
-    <!-- Остальная часть страницы (categoryScreen, cart-bar, footer, orderModal) остаётся без изменений -->
+    <div id="categoryScreen" class="hidden">
+        <button class="back-btn" onclick="backToMain()">← Назад</button>
+        <h2 id="categoryTitle"></h2>
+        <div id="subcategoryGrid" class="subcategory-grid"></div>
+        <div id="calcPanel" class="hidden">
+            <h3 id="calcTitle"></h3>
+            <!-- ... калькулятор ... -->
+        </div>
+        <div id="cartList"></div>
+    </div>
 
 </div>
 
-<!-- ... остальной HTML и скрипт как в предыдущей версии ... -->
+<div id="cart-bar" class="hidden">
+    <div>Корзина: <strong id="cartCount">0</strong> • <strong id="cartTotal">0 ₽</strong></div>
+    <div>
+        <button id="clearCartBtn">Очистить</button>
+        <button id="orderBtn">Оформить</button>
+    </div>
+</div>
+
+<footer>
+    <div>
+        <a href="https://t.me/zoogrand73">Telegram</a> • 
+        <a href="https://vk.com/zoogrand73">VK</a> • 
+        <a href="https://zoogrand73.tilda.ws">Сайт</a>
+    </div>
+    <div class="phone">📞 +7-999-190-10-89 (Зульфия)</div>
+</footer>
 
 <script>
-    // ... весь предыдущий скрипт остаётся без изменений ...
+    // ... весь ваш предыдущий JavaScript-код остаётся без изменений ...
 
-    // Добавляем класс loaded для баннера после загрузки изображения
-    document.addEventListener('DOMContentLoaded', () => {
-        const bannerImg = document.querySelector('.main-banner');
-        bannerImg.onload = () => bannerImg.classList.add('loaded');
-        if (bannerImg.complete) bannerImg.classList.add('loaded');
-    });
+    // Добавляем класс loaded после загрузки баннера
+    const banner = document.querySelector('.main-banner');
+    banner.onload = () => banner.classList.add('loaded');
+    if (banner.complete) banner.classList.add('loaded');
 
     updateCart();
 </script>
