@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand — Передержка и товары</title>
+    <title>ZooGrand — Товары и передержка</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -25,26 +25,30 @@
         .category-card i { font-size:2.8rem; margin-bottom:0.8rem; color:var(--accent); }
         .category-card div { font-weight:600; font-size:1.1rem; }
 
-        .subcategory-grid, .product-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; margin:1.5rem 0; }
+        .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; margin:1.5rem 0; }
         .subcategory-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); transition:transform 0.25s; cursor:pointer; }
         .subcategory-card:hover { transform:translateY(-6px); }
-        .subcategory-img { width:100%; height:160px; object-fit:cover; }
+        .subcategory-img { width:100%; height:180px; object-fit:cover; }
         .subcategory-content { padding:1rem; }
         .price { color:var(--accent); font-weight:700; font-size:1.3rem; margin:0.5rem 0; }
         .desc { color:var(--gray); line-height:1.45; font-size:0.95rem; white-space:pre-wrap; }
 
+        .qty-control { display:flex; align-items:center; gap:1rem; margin:1rem 0; justify-content:center; }
+        .qty-btn { width:44px; height:44px; border-radius:50%; background:#eee; border:none; font-size:1.4rem; cursor:pointer; }
+        .qty-input { width:70px; text-align:center; font-size:1.2rem; padding:0.6rem; border:1px solid #ddd; border-radius:10px; }
+        .add-btn { background:var(--green); color:white; border:none; padding:0.9rem; border-radius:12px; font-size:1.1rem; font-weight:600; cursor:pointer; width:100%; margin-top:0.8rem; }
+
         #cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); box-shadow:0 -4px 16px rgba(0,0,0,0.15); padding:0.8rem 1rem; display:flex; justify-content:space-between; align-items:center; z-index:100; font-weight:600; }
         #clearCartBtn { background:var(--danger); color:white; border:none; padding:0.6rem 1.2rem; border-radius:10px; cursor:pointer; font-size:0.95rem; }
 
-        #cartList { margin:1rem 0; padding-bottom:4rem; } /* отступ под фиксированный бар */
-        .cart-item { background:var(--card); border-radius:12px; padding:1rem; margin-bottom:1rem; box-shadow:var(--shadow); position:relative; }
+        #cartList { margin:1rem 0; padding-bottom:5rem; }
+        .cart-item { background:var(--card); border-radius:12px; padding:1rem; margin-bottom:1rem; box-shadow:var(--shadow); }
         .cart-item-title { font-weight:600; margin-bottom:0.4rem; }
         .cart-item-details { color:var(--gray); font-size:0.95rem; }
         .cart-item-total { font-weight:700; color:var(--accent); margin-top:0.6rem; display:block; }
 
-        .back-btn, .add-btn { padding:0.8rem 1.4rem; border-radius:12px; cursor:pointer; font-weight:600; width:100%; margin:0.8rem 0; }
-        .back-btn { background:#e0e0e0; color:#333; border:none; }
-        .add-btn { background:var(--green); color:white; border:none; }
+        .back-btn { background:#e0e0e0; color:#333; border:none; padding:0.8rem 1.4rem; border-radius:12px; cursor:pointer; font-weight:600; margin-bottom:1rem; }
+        .hidden { display:none !important; }
 
         #orderModal { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; z-index:200; }
         .modal-content { background:var(--card); border-radius:16px; padding:1.8rem; width:92%; max-width:420px; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
@@ -57,13 +61,11 @@
         .date-row { display:flex; flex-direction:column; gap:0.8rem; margin:1.2rem 0; }
         input[type="date"] { padding:0.8rem; font-size:1rem; border:1px solid #ccc; border-radius:10px; }
         .discount { color:#27ae60; font-weight:700; margin-top:0.6rem; font-size:1.05rem; }
-
-        .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-<header>ZooGrand — Передержка и товары</header>
+<header>ZooGrand — Товары и передержка</header>
 
 <div class="container">
 
@@ -80,15 +82,15 @@
         <h2 id="categoryTitle"></h2>
 
         <div id="subcategoryGrid" class="subcategory-grid"></div>
-        <div id="productGrid" class="product-grid"></div>
-
         <div id="calcPanel" class="hidden">
             <h3 id="calcTitle"></h3>
-            <div class="date-row" id="dateFields">
+
+            <div class="date-row hidden" id="dateFields">
                 <label>Заезд:</label><input type="date" id="checkIn">
                 <label>Выезд:</label><input type="date" id="checkOut">
             </div>
-            <div id="nightsInfo" style="font-size:1.1rem;margin:1rem 0;">
+
+            <div id="nightsInfo" class="hidden" style="font-size:1.1rem;margin:1rem 0;">
                 Суток: <strong id="nightsCount">1</strong> • Сумма: <strong id="calcPrice">0 ₽</strong>
             </div>
             <div id="discountBlock" class="discount hidden">Скидка 10% за 10+ суток!</div>
@@ -102,7 +104,6 @@
             <button class="add-btn" onclick="addToCartFromCalc()">Добавить в корзину</button>
         </div>
 
-        <!-- Визуальный список корзины -->
         <div id="cartList"></div>
     </div>
 
@@ -120,7 +121,7 @@
     <div class="modal-content">
         <h3>Оформление заказа</h3>
         <label>Комментарий / пожелания:</label>
-        <textarea id="orderComment" placeholder="Порода, кличка, аллергии, время приезда и т.д..."></textarea>
+        <textarea id="orderComment" placeholder="Порода, кличка, аллергии, время доставки и т.д..."></textarea>
 
         <div class="modal-buttons">
             <button class="modal-btn cancel" onclick="closeOrderModal()">Отмена</button>
@@ -136,13 +137,20 @@
     if (tg.colorScheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
     const products = [
-        // Передержка с картинками
-        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йоркширский терьер, русский той-терьер, померанский шпиц (мини/той), мальтезе (мини), пражский крысарик, папильон (маленькие), мопс (мелкие), французский бульдог (очень мелкие)\nМогут жить по 4–8 в одном вольере, мало едят, часто агрессивны к крупным, склонны к травмам, много лают", imageUrl:"https://www.rd.com/wp-content/uploads/2021/06/GettyImages-1205998407-e1624731290663.jpg"},
-        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–10(12) кг\nЙоркширский терьер (стандарт), померанский шпиц, ши-тцу, пекинес, мальтезе, той-пудель, кавалер кинг чарльз спаниель, бишон фризе, болоньез, японский хин, миниатюрный шнауцер, брюссельский гриффон\nСовместимы в группах, истеричны при разлуке, требуют частого вычесывания, склонны к зубным проблемам", imageUrl:"https://www.thesprucepets.com/thmb/bexogNDpWd6BQJiEKYHuSXX-ysc=/2779x0/filters:no_upscale():strip_icc()/GettyImages-94456490-e5e698281bd44ed99770988ac342c113.jpg"},
-        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел-терьер, кокер-спаниель (американский/английский), бигль, бассет-хаунд, шелти (шелтландская овчарка), вельш-корги пемброк/кардиган, миниатюрный/карликовый пудель, басенджи, шиба-ину, такса (стандарт), французский бульдог (средние), бостон-терьер\nВысокая энергия, нуждаются в активном выгуле, много лают/воют, хорошая совместимость", imageUrl:"https://www.omlet.us/images/cache/1024/681/Dog-Basenji-A_young,_brown_Basenji_lying_neatly_on_the_rocks.jpg"},
-        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–28(30) кг\nБультерьер, стаффордширский бультерьер, английский бульдог, бордер-колли, австралийская овчарка, колли (длинношерстная), хаски (мелкие/средние), лабрадор-ретривер (молодые/стройные), золотистый ретривер (стройные), эстонская гончая, английский кокер-спаниель, уиппет, далматин, сибирский хаски (средние), американский кокер-спаниель\nСамая проблемная группа по дракам, высокая возбудимость", imageUrl:"https://cmg-cmg-tv-10090-prod.cdn.arcpublishing.com/resizer/v2/6LYK2IF5WRINNIL5VTK4W3WJQ4.png?smart=true&auth=301c7f08a09f403fb0624eeb5b4d98f5b63e4cb1314af1dd93cae6e624067566&width=1010&height=568"},
-        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–45(50) кг\nНемецкая овчарка, лабрадор-ретривер, золотистый ретривер, ротвейлер, доберман, боксёр, ризеншнауцер, алабай (молодые/средние), сибирский хаски (крупные), маламут (средние), кане-корсо (стройные), немецкий дог (стройные), бернский зенненхунд (средние), колли (гладкошерстная), восточно-европейская овчарка\nОтдельный вольер почти всегда, сильный укус, территориальность", imageUrl:"https://worldanimalfoundation.org/wp-content/uploads/2023/10/large-dog-breeds-1024x706.jpg"},
-        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nКавказская овчарка, среднеазиатская овчарка (алабай взрослый), английский мастиф, немецкий дог, сенбернар, леонбергер, ньюфаундленд, ирландский волкодав, большой швейцарский зенненхунд, тибетский мастиф, кане-корсо (крупные), ротвейлер (очень крупные), московская сторожевая\nТолько отдельный вольер/выгул, огромный расход корма, очень сильные", imageUrl:"https://pethelpful.com/.image/w_1920,q_auto:good,c_limit/MTc0OTY5NDc5MDk1MzMwNzg0/10-largest-dog-breeds.jpg"}
+        // Лежанки — 5 подкатегорий
+        {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:1400, desc:"60×45 см, бортик 8–12 см\nХоллофайбер, Оксфорд 600D PU\nБюджетная, лёгкая, для мелких собак\nдо 15 кг\nСъёмный чехол: нет\nМашинная стирка: да (целиком)\nВодоотталкивающая пропитка: да\nАнтискользящее дно: да", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6807648889.jpg"},
+        {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, desc:"Диаметр 70–100 см, бортик 18–25 см\nХоллофайбер + силикон, Велюр / плюш\nУютная, для зарывания, мелкие–средние\nдо 30 кг\nСъёмный чехол: иногда\nМашинная стирка: только чехол\nВодоотталкивающая: нет\nАнтискользящее дно: да", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
+        {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, desc:"80×60 – 120×80 см, бортик 12–18 см\nОртопедическая пена HR + холлофайбер\nРип-стоп / флок\nДля суставов, пожилые, средние–крупные\nдо 50 кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 3500–9000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
+        {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, desc:"90×70 – 130×90 см, бортик 20–30 см\nОртопедическая пена + memory foam\nМикрофибра / замша с тефлоном\nРоскошь, интерьер, крупные\nдо 70 кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 5500–15000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
+        {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, desc:"120×90 – 160×110 см, бортик 5–10 см или без\nОртопедическая пена 10–15 см\nКордура / баллистический нейлон\nДля гигантов, моется шлангом, вольеры\n45+ кг\nСъёмный чехол: да\nМашинная стирка: да (чехол)\nВодоотталкивающая: да\nАнтискользящее дно: да\nЦена 8000–25000 руб", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
+
+        // Передержка (6 подкатегорий) — из предыдущей версии
+        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йоркширский терьер, русский той-терьер, померанский шпиц (мини/той), мальтезе (мини), пражский крысарик, папильон (маленькие), мопс (мелкие), французский бульдог (очень мелкие)\nМогут жить по 4–8 в одном вольере, мало едят, часто агрессивны к крупным, склонны к травмам, много лают", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a"},
+        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–10(12) кг\nЙоркширский терьер (стандарт), померанский шпиц, ши-тцу, пекинес, мальтезе, той-пудель, кавалер кинг чарльз спаниель, бишон фризе, болоньез, японский хин, миниатюрный шнауцер, брюссельский гриффон\nСовместимы в группах, истеричны при разлуке, требуют частого вычесывания, склонны к зубным проблемам", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"},
+        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел-терьер, кокер-спаниель (американский/английский), бигль, бассет-хаунд, шелти (шелтландская овчарка), вельш-корги пемброк/кардиган, миниатюрный/карликовый пудель, басенджи, шиба-ину, такса (стандарт), французский бульдог (средние), бостон-терьер\nВысокая энергия, нуждаются в активном выгуле, много лают/воют, хорошая совместимость", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b"},
+        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–28(30) кг\nБультерьер, стаффордширский бультерьер, английский бульдог, бордер-колли, австралийская овчарка, колли (длинношерстная), хаски (мелкие/средние), лабрадор-ретривер (молодые/стройные), золотистый ретривер (стройные), эстонская гончая, английский кокер-спаниель, уиппет, далматин, сибирский хаски (средние), американский кокер-спаниель\nСамая проблемная группа по дракам, высокая возбудимость", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
+        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–45(50) кг\nНемецкая овчарка, лабрадор-ретривер, золотистый ретривер, ротвейлер, доберман, боксёр, ризеншнауцер, алабай (молодые/средние), сибирский хаски (крупные), маламут (средние), кане-корсо (стройные), немецкий дог (стройные), бернский зенненхунд (средние), колли (гладкошерстная), восточно-европейская овчарка\nОтдельный вольер почти всегда, сильный укус, территориальность", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45"},
+        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nКавказская овчарка, среднеазиатская овчарка (алабай взрослый), английский мастиф, немецкий дог, сенбернар, леонбергер, ньюфаундленд, ирландский волкодав, большой швейцарский зенненхунд, тибетский мастиф, кане-корсо (крупные), ротвейлер (очень крупные), московская сторожевая\nТолько отдельный вольер/выгул, огромный расход корма, очень сильные", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36"}
     ];
 
     let cart = [];
@@ -153,32 +161,28 @@
         document.getElementById('categoryScreen').classList.remove('hidden');
         document.getElementById('categoryTitle').textContent = cat;
 
-        document.getElementById('subcategoryGrid').classList.add('hidden');
-        document.getElementById('productGrid').classList.add('hidden');
+        document.getElementById('subcategoryGrid').classList.remove('hidden');
         document.getElementById('calcPanel').classList.add('hidden');
 
-        if (cat === 'Передержка') {
-            document.getElementById('subcategoryGrid').classList.remove('hidden');
-            renderSubcategories();
-        } else {
-            document.getElementById('productGrid').innerHTML = '<p style="text-align:center;color:var(--gray);">Раздел в разработке</p>';
-            document.getElementById('productGrid').classList.remove('hidden');
-        }
+        renderSubcategories(cat);
         renderCartList();
     }
 
-    function renderSubcategories() {
+    function renderSubcategories(category) {
         const grid = document.getElementById('subcategoryGrid');
         grid.innerHTML = '';
-        products.forEach((item, i) => {
+
+        const items = products.filter(p => p.category === category);
+
+        items.forEach((item, i) => {
             const card = document.createElement('div');
             card.className = 'subcategory-card animate-fadeInUp';
-            card.style.animationDelay = `${i*0.12}s`;
+            card.style.animationDelay = `${i * 0.1}s`;
             card.innerHTML = `
-                <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub}" onerror="this.src='https://via.placeholder.com/400x160?text=${item.sub}'">
+                <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub}" onerror="this.src='https://via.placeholder.com/400x180?text=${item.sub}'">
                 <div class="subcategory-content">
                     <h3>${item.sub}</h3>
-                    <div class="price">${item.price} ₽ / сутки</div>
+                    <div class="price">${item.price} ₽</div>
                     <div class="desc">${item.desc}</div>
                 </div>
             `;
@@ -191,24 +195,35 @@
         currentItem = item;
         document.getElementById('subcategoryGrid').classList.add('hidden');
         document.getElementById('calcPanel').classList.remove('hidden');
-        document.getElementById('calcTitle').textContent = item.sub + ' — передержка';
+        document.getElementById('calcTitle').textContent = item.sub;
 
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('checkIn').value = today;
-        document.getElementById('checkIn').min = today;
-        document.getElementById('checkOut').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-        document.getElementById('checkOut').min = today;
+        const isOverexposure = item.category === 'Передержка';
 
-        document.getElementById('qtyPanel').classList.add('hidden');
-        updateCalc();
-        document.getElementById('checkIn').onchange = updateCalc;
-        document.getElementById('checkOut').onchange = updateCalc;
+        document.getElementById('dateFields').classList.toggle('hidden', !isOverexposure);
+        document.getElementById('nightsInfo').classList.toggle('hidden', !isOverexposure);
+        document.getElementById('qtyPanel').classList.toggle('hidden', isOverexposure);
+
+        if (isOverexposure) {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkIn').value = today;
+            document.getElementById('checkIn').min = today;
+            document.getElementById('checkOut').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            document.getElementById('checkOut').min = today;
+
+            updateCalc();
+            document.getElementById('checkIn').onchange = updateCalc;
+            document.getElementById('checkOut').onchange = updateCalc;
+        } else {
+            document.getElementById('qtyInput').value = 1;
+        }
     }
 
     function updateCalc() {
+        if (currentItem.category !== 'Передержка') return;
+
         const inD = new Date(document.getElementById('checkIn').value);
         const outD = new Date(document.getElementById('checkOut').value);
-        let nights = Math.max(1, Math.ceil((outD - inD) / (1000*60*60*24)));
+        let nights = Math.max(1, Math.ceil((outD - inD) / 86400000));
 
         let total = nights * currentItem.price;
         let discount = nights >= 10 ? 0.1 : 0;
@@ -228,13 +243,16 @@
     function addToCartFromCalc() {
         if (!currentItem) return;
 
-        let quantity = parseInt(document.getElementById('nightsCount')?.textContent) || parseInt(document.getElementById('qtyInput')?.value) || 1;
+        const isOver = currentItem.category === 'Передержка';
+        let quantity = isOver
+            ? parseInt(document.getElementById('nightsCount').textContent)
+            : parseInt(document.getElementById('qtyInput').value) || 1;
 
         const entry = {
             product: currentItem,
             quantity,
-            checkIn: document.getElementById('checkIn')?.value || null,
-            checkOut: document.getElementById('checkOut')?.value || null
+            checkIn: isOver ? document.getElementById('checkIn').value : null,
+            checkOut: isOver ? document.getElementById('checkOut').value : null
         };
 
         const exist = cart.find(e => e.product.id === currentItem.id);
@@ -249,19 +267,16 @@
 
     function renderCartList() {
         const list = document.getElementById('cartList');
-        list.innerHTML = '';
-        if (cart.length === 0) {
-            list.innerHTML = '<p style="text-align:center;color:var(--gray);">Корзина пуста</p>';
-            return;
-        }
+        list.innerHTML = cart.length === 0 ? '<p style="text-align:center;color:var(--gray);">Корзина пуста</p>' : '';
 
-        cart.forEach((item, index) => {
+        cart.forEach(item => {
             const div = document.createElement('div');
             div.className = 'cart-item';
-            let details = `${item.quantity} × ${item.product.sub || item.product.name}`;
-            if (item.checkIn) details += ` (${item.checkIn} → ${item.checkOut})`;
+            let title = item.product.sub || item.product.name;
+            let details = `${item.quantity} шт.`;
+            if (item.checkIn) details = `${item.quantity} сут. (${item.checkIn} → ${item.checkOut})`;
             div.innerHTML = `
-                <div class="cart-item-title">${item.product.sub || item.product.name}</div>
+                <div class="cart-item-title">${title}</div>
                 <div class="cart-item-details">${details}</div>
                 <span class="cart-item-total">${(item.quantity * item.product.price).toFixed(0)} ₽</span>
             `;
@@ -280,7 +295,7 @@
     }
 
     function clearCart() {
-        if (confirm('Очистить корзину?')) {
+        if (confirm('Очистить всю корзину?')) {
             cart = [];
             updateCart();
             tg.showPopup({message: 'Корзина очищена'});
@@ -302,11 +317,12 @@
 
     function sendOrder() {
         const comment = document.getElementById('orderComment').value.trim();
-        let text = 'Новый заказ в ZooGrand\n\n';
+        let text = 'Заказ ZooGrand\n\n';
 
         cart.forEach(item => {
-            let line = `${item.product.sub || item.product.name} × ${item.quantity} сут.`;
+            let line = `${item.product.sub || item.product.name} × ${item.quantity}`;
             if (item.checkIn) line += ` (${item.checkIn} → ${item.checkOut})`;
+            else line += ' шт.';
             text += line + '\n';
         });
 
@@ -315,13 +331,13 @@
         if (comment) text += `\n\nКомментарий: ${comment}`;
 
         tg.sendData(text);
-        tg.showAlert('Заказ отправлен! Мы скоро свяжемся.');
+        tg.showAlert('Заказ отправлен! Скоро свяжемся.');
         cart = [];
         updateCart();
         closeOrderModal();
     }
 
-    // Инициализация
+    // Старт
     updateCart();
 </script>
 </body>
