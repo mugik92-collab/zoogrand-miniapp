@@ -6,13 +6,12 @@
 <title>ZooGrand73</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 body{
     margin:0;
     font-family:system-ui;
-    background:#f6f7f9;
+    background:#f4f5f7;
 }
 header{
     background:linear-gradient(135deg,#ff9800,#ffb347);
@@ -22,12 +21,12 @@ header{
     font-size:1.4rem;
     font-weight:800;
 }
-.container{padding:14px;padding-bottom:160px}
+.container{padding:14px;padding-bottom:200px}
 
 .banner{
     height:220px;
     border-radius:0 0 22px 22px;
-    background:url("https://images.unsplash.com/photo-1601758123927-196ea9f3b2f5") center/cover;
+    background:url("https://images.unsplash.com/photo-1601758173925-196ea9f3b2f5?q=80&w=1200") center/cover;
     box-shadow:0 8px 25px #0003;
     display:flex;
     align-items:center;
@@ -35,7 +34,10 @@ header{
     color:#fff;
     text-align:center;
 }
-.banner h1{font-size:2rem;text-shadow:0 4px 12px #000}
+.banner h1{
+    font-size:2rem;
+    text-shadow:0 4px 12px #000;
+}
 
 .categories{
     display:flex;
@@ -55,8 +57,7 @@ header{
 .cat img{
     width:60px;
     height:60px;
-    object-fit:cover;
-    border-radius:50%;
+    object-fit:contain;
     margin-bottom:6px;
 }
 
@@ -88,17 +89,33 @@ input,textarea,select{
     margin-bottom:8px;
 }
 
-#cart-bar{
+#cart{
     position:fixed;
     bottom:0;
     left:0;
     right:0;
-    background:linear-gradient(135deg,#ff9800,#ffb347);
-    color:#fff;
-    padding:14px;
+    background:#fff;
     border-radius:20px 20px 0 0;
-    box-shadow:0 -8px 20px #0003;
+    box-shadow:0 -6px 20px #0003;
+    padding:14px;
     z-index:100;
+}
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+}
+.qty button{
+    background:#eee;
+    color:#333;
+    padding:4px 8px;
+    margin:0 4px;
+}
+.total{
+    font-weight:800;
+    font-size:1.2rem;
+    text-align:right;
 }
 </style>
 </head>
@@ -113,29 +130,31 @@ input,textarea,select{
     <h1>Счастливые питомцы<br>— счастливая семья 🐾</h1>
 </div>
 
+<!-- ГЛАВНЫЙ ЭКРАН -->
 <div id="main">
     <div class="categories">
-        <div class="cat" onclick="openCat('Лежанки')">
+        <div class="cat" onclick="openCategory('Лежанки')">
             <img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">
             Лежанки
         </div>
-        <div class="cat" onclick="openCat('Передержка')">
+        <div class="cat" onclick="openCategory('Передержка')">
             <img src="https://cdn-icons-png.flaticon.com/512/194/194279.png">
             Передержка
         </div>
-        <div class="cat" onclick="openCat('Вкусняшки')">
+        <div class="cat" onclick="openCategory('Вкусняшки')">
             <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
             Вкусняшки
         </div>
     </div>
 </div>
 
+<!-- КАТАЛОГ -->
 <div id="catalog" class="hidden">
     <button onclick="back()">← Назад</button>
     <h2 id="title"></h2>
     <div id="items"></div>
 
-    <h3>🐕 Данные питомца</h3>
+    <h3>🐕 Питомец</h3>
     <input id="petName" placeholder="Кличка">
     <input id="petBreed" placeholder="Порода">
 
@@ -156,8 +175,10 @@ input,textarea,select{
 
 </div>
 
-<div id="cart-bar" class="hidden">
-    🛒 В корзине: <b id="cartTotal">0 ₽</b>
+<!-- КОРЗИНА -->
+<div id="cart" class="hidden">
+    <div id="cartItems"></div>
+    <div class="total">Итого: <span id="total">0 ₽</span></div>
 </div>
 
 <script>
@@ -165,78 +186,119 @@ const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
 
 tg.MainButton.setText("🛒 Оформить заказ");
-tg.MainButton.color="#ffffff";
-tg.MainButton.textColor="#ff9800";
+tg.MainButton.color = "#ff9800";
+tg.MainButton.textColor = "#ffffff";
 
-let cart=[];
+let cart = [];
 
-const data={
+const products = {
     "Лежанки":[
-        {n:"Лежанка Эконом",p:800},
-        {n:"Лежанка Премиум",p:1500}
+        {name:"Лежанка Эконом",price:800},
+        {name:"Лежанка Премиум",price:1500}
     ],
     "Передержка":[
-        {n:"Передержка (сутки)",p:1200}
+        {name:"Передержка (сутки)",price:1200}
     ],
     "Вкусняшки":[
-        {n:"Легкое говяжье",p:100},
-        {n:"Рубец говяжий",p:100}
+        {name:"Легкое говяжье",price:100},
+        {name:"Рубец говяжий",price:100}
     ]
 };
 
-function openCat(c){
+function openCategory(cat){
     main.classList.add("hidden");
     catalog.classList.remove("hidden");
-    title.innerText=c;
-    items.innerHTML="";
-    data[c].forEach(i=>{
+    title.innerText = cat;
+    items.innerHTML = "";
+
+    products[cat].forEach(p=>{
         let el=document.createElement("div");
         el.className="card";
 
-        if(c==="Вкусняшки"){
+        if(cat==="Вкусняшки"){
             el.innerHTML=`
-                <b>${i.n}</b>
-                <select onchange="addTreat('${i.n}',${i.p},this.value)">
-                    <option>100</option>
-                    <option>250</option>
-                    <option>500</option>
+                <b>${p.name}</b>
+                <select onchange="addTreat('${p.name}',${p.price},this.value)">
+                    <option value="">Выбрать граммы</option>
+                    <option value="100">100 г</option>
+                    <option value="250">250 г</option>
+                    <option value="500">500 г</option>
                 </select>`;
         }else{
-            el.innerHTML=`<b>${i.n}</b><br>${i.p} ₽
-            <button onclick="add('${i.n}',${i.p},'${c}')">В корзину</button>`;
+            el.innerHTML=`
+                <b>${p.name}</b><br>${p.price} ₽
+                <button onclick="addItem('${p.name}',${p.price})">В корзину</button>`;
         }
         items.appendChild(el);
     });
 }
 
-function add(n,p,c){
-    cart.push({n,p,c});
-    update();
+function back(){
+    catalog.classList.add("hidden");
+    main.classList.remove("hidden");
 }
 
-function addTreat(n,p,g){
-    cart.push({n:`${n} (${g} г)`,p:p*(g/100),c:"Вкусняшки"});
-    update();
+function addItem(name,price){
+    cart.push({name,price,qty:1});
+    renderCart();
 }
 
-function update(){
-    let total=cart.reduce((s,i)=>s+i.p,0);
-    let days=parseInt(days?.value||0);
-    if(days>10) total*=0.9;
-    cartTotal.innerText=Math.round(total)+" ₽";
-    cartBar.classList.remove("hidden");
+function addTreat(name,price,grams){
+    if(!grams) return;
+    cart.push({
+        name:`${name} (${grams} г)`,
+        price:price*(grams/100),
+        qty:1
+    });
+    renderCart();
+}
+
+function renderCart(){
+    cartItems.innerHTML="";
+    let sum=0;
+
+    cart.forEach((i,idx)=>{
+        sum+=i.price*i.qty;
+        cartItems.innerHTML+=`
+        <div class="cart-item">
+            <div>${i.name}</div>
+            <div class="qty">
+                <button onclick="changeQty(${idx},-1)">−</button>
+                ${i.qty}
+                <button onclick="changeQty(${idx},1)">+</button>
+            </div>
+        </div>`;
+    });
+
+    if(days.value>10) sum*=0.9;
+
+    total.innerText=Math.round(sum)+" ₽";
+    cart.classList.remove("hidden");
     tg.MainButton.show();
 }
 
+function changeQty(i,d){
+    cart[i].qty+=d;
+    if(cart[i].qty<=0) cart.splice(i,1);
+    if(cart.length===0){
+        cart.classList.add("hidden");
+        tg.MainButton.hide();
+    }
+    renderCart();
+}
+
 tg.MainButton.onClick(()=>{
-    let text=`🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n`;
-    cart.forEach((i,idx)=>text+=`${idx+1}. ${i.n} — ${i.p} ₽\n`);
-    text+=`\n🐕 ${petName.value} (${petBreed.value})
+    let msg="🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n";
+    cart.forEach((i,n)=>msg+=`${n+1}. ${i.name} × ${i.qty}\n`);
+    msg+=`
+🐕 ${petName.value}
 🏠 ${address.value}
 📅 ${startDate.value} | ${days.value} суток
 ⏰ ${checkIn.value} – ${checkOut.value}
-💬 ${comment.value}`;
-    tg.sendData(text);
+💬 ${comment.value}
+
+💰 Итого: ${total.innerText}`;
+    tg.sendData(msg);
 });
 </script>
 
