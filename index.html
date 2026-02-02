@@ -1,139 +1,136 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>ZooGrand</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      padding: 12px;
-    }
-
-    .tab {
-      padding: 10px 14px;
-      background: #1e293b;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .tab.active {
-      background: #22c55e;
-      color: black;
-    }
-
-    .section {
-      display: none;
-      padding: 16px;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .card h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
-
-    .price {
-      color: #22c55e;
-      margin-bottom: 8px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #22c55e;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZooGrand Меню</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background: #f0f0f0; }
+        h1 { text-align: center; }
+        h2 { margin-top: 20px; }
+        .product { border: 1px solid #ccc; padding: 10px; margin: 10px 0; background: white; }
+        .product button { background: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+        #cart { margin-top: 20px; }
+        #contacts { margin-top: 20px; padding: 10px; background: #e0e0e0; }
+        #orderBtn { display: none; width: 100%; padding: 10px; background: #2196F3; color: white; border: none; font-size: 16px; }
+    </style>
 </head>
-
 <body>
+    <h1>ZooGrand Меню</h1>
+    <div id="products"></div>
+    <div id="cart">
+        <h2>Корзина</h2>
+        <ul id="cartItems"></ul>
+        <p>Итого: <span id="total">0</span> руб.</p>
+    </div>
+    <div id="contacts">
+        <h2>Контакты</h2>
+        <p>Адрес: Ул. Примерная, 123, Москва</p>  <!-- Измени здесь -->
+        <p>Телефон: +7 (123) 456-78-90</p>     <!-- Измени здесь -->
+        <p>Email: info@zoogrand.ru</p>         <!-- Измени здесь -->
+    </div>
+    <button id="orderBtn" onclick="placeOrder()">Заказать</button>
 
-<div class="tabs">
-  <div class="tab active" onclick="showTab('stay', this)">Передержка</div>
-  <div class="tab" onclick="showTab('beds', this)">Лежанки</div>
-  <div class="tab" onclick="showTab('snacks', this)">Вкусняшки</div>
-</div>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();  // Инициализация WebApp
+        tg.expand(); // Развернуть на весь экран
 
-<div id="stay" class="section active">
-  <div class="card">
-    <h3>Передержка собаки</h3>
-    <div class="price">1000 ₽ / сутки</div>
-    <button onclick="add('Передержка', 1000)">Добавить</button>
-  </div>
-</div>
+        // Массив продуктов из файла — измени здесь, если нужно доработать
+        const products = [
+            // Вкусняшки
+            { id: 1, name: 'Сушеные вкусняшки из субпродуктов - легкое говяжье', price: 100, desc: '100 грамм, легкое говяжье' },
+            { id: 2, name: 'Сушеные вкусняшки из субпродуктов - рубец говяжий', price: 100, desc: '100 грамм, рубец говяжий' },
+            { id: 3, name: 'Сушеные вкусняшки из субпродуктов - Вымя говяжье', price: 110, desc: '1 шт, Вымя говяжье' },
+            { id: 4, name: 'Сушеные вкусняшки из субпродуктов - Трахея', price: 130, desc: '1 шт, Трахея' },
+            { id: 5, name: 'Сушеные вкусняшки из субпродуктов - Бычьи семенники', price: 150, desc: '1 шт, Бычьи семенники' },
+            { id: 6, name: 'Сушеные вкусняшки из субпродуктов - Бычий корень', price: 230, desc: '1 шт, Бычий корень' },
+            { id: 7, name: 'Сушеные вкусняшки из субпродуктов - Говяжьи почки', price: 100, desc: '1 шт, Говяжьи почки' },
+            // Лежанки
+            { id: 8, name: 'Лежанка-овал "Эконом"', price: 800, desc: '60×45 см, 8–12 см бортик, Холлофайбер, Оксфорд 600D PU, Бюджет, лёгкая, для мелких, до 15 кг' },
+            { id: 9, name: 'Лежанка-пончик "Классик"', price: 1200, desc: '70–100 см Ø, 18–25 см бортик, Холлофайбер + силикон, Велюр / плюш, Уют, зарываться, мелкие–средние, до 30 кг' },
+            { id: 10, name: 'Лежанка "Ортопед"', price: 1400, desc: '80×60 – 120×80 см, 12–18 см бортик, Ортопедическая пена HR + холлофайбер, Рип-стоп / флок, Для суставов, пожилые, средние–крупные, до 50 кг' },
+            { id: 11, name: 'Лежанка-дивана "Премиум"', price: 1500, desc: '90×70 – 130×90 см, 20–30 см бортик, Ортопедическая пена + memory foam, Микрофибра / замша с тефлоном, Роскошь, интерьер, крупные, до 70 кг' },
+            { id: 12, name: 'Лежанка-матрас "Гигант"', price: 1600, desc: '120×90 – 160×110 см, Без / 5–10 см бортик, Ортопедическая пена 10–15 см, Кордура / баллистический нейлон, Для гигантов, моется шлангом, вольеры, 45+ кг' },
+            // Передержка (услуги, цена за сутки)
+            { id: 13, name: 'Мини / Той', price: 650, desc: 'до 28–30 см, до 3–5 кг, Чихуахуа, йоркширский терьер... (см. полное в файле), Могут жить по 4–8 в одном вольере, мало едят..., за сутки' },
+            { id: 14, name: 'Маленькие', price: 900, desc: '28–40 см, 5–10(12) кг, Йоркширский терьер (стандарт), померанский шпиц... , Совместимы в группах, истеричны при разлуке..., за сутки' },
+            { id: 15, name: 'Маленькие-средние', price: 1100, desc: '35–50 см, 10–18 кг, Джек-рассел-терьер, кокер-спаниель... , Высокая энергия, нуждаются в активном выгуле..., за сутки' },
+            { id: 16, name: 'Средние', price: 1300, desc: '40–58 см, 15–28(30) кг, Бультерьер, стаффордширский бультерьер... , Самая проблемная группа по дракам..., за сутки' },
+            { id: 17, name: 'Крупные', price: 1900, desc: '58–70 см, 28–45(50) кг, Немецкая овчарка, лабрадор-ретривер... , Отдельный вольер почти всегда..., за сутки' },
+            { id: 18, name: 'Очень крупные / Гиганты', price: 3500, desc: '70+ см, 45–90+ кг, Кавказская овчарка, среднеазиатская овчарка... , Только отдельный вольер/выгул..., за сутки' }
+        ];
 
-<div id="beds" class="section">
-  <div class="card">
-    <h3>Лежанка «Комфорт»</h3>
-    <div class="price">1500 ₽</div>
-    <button onclick="add('Лежанка Комфорт', 1500)">Добавить</button>
-  </div>
-</div>
+        let cart = [];
 
-<div id="snacks" class="section">
-  <div class="card">
-    <h3>Мясные вкусняшки</h3>
-    <div class="price">500 ₽</div>
-    <button onclick="add('Вкусняшки', 500)">Добавить</button>
-  </div>
-</div>
+        // Отобразить продукты с категориями
+        function displayProducts() {
+            const productsDiv = document.getElementById('products');
+            const categories = {
+                'Вкусняшки': products.filter(p => p.id <= 7),
+                'Лежанки': products.filter(p => p.id > 7 && p.id <= 12),
+                'Передержка': products.filter(p => p.id > 12)
+            };
+            for (let cat in categories) {
+                if (categories[cat].length > 0) {
+                    const h2 = document.createElement('h2');
+                    h2.textContent = cat;
+                    productsDiv.appendChild(h2);
+                    categories[cat].forEach(product => {
+                        const div = document.createElement('div');
+                        div.className = 'product';
+                        div.innerHTML = `
+                            <h3>${product.name}</h3>
+                            <p>${product.desc}</p>
+                            <p>Цена: ${product.price} руб.</p>
+                            <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+                        `;
+                        productsDiv.appendChild(div);
+                    });
+                }
+            }
+        }
 
-<script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
+        // Добавить в корзину
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCart();
+            tg.showPopup({ message: `${product.name} добавлен в корзину!` });
+        }
 
-  let cart = [];
+        // Обновить корзину
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - ${item.price} руб.`;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+            document.getElementById('total').textContent = total;
+            if (cart.length > 0) {
+                document.getElementById('orderBtn').style.display = 'block';
+            }
+        }
 
-  function showTab(id, el) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // Разместить заказ (можно интегрировать с ботом)
+        function placeOrder() {
+            let orderText = 'Заказ:\n';
+            cart.forEach(item => {
+                orderText += `${item.name} - ${item.price} руб.\n`;
+            });
+            orderText += `Итого: ${document.getElementById('total').textContent} руб.`;
+            tg.sendData(orderText);  // Отправить данные в бот (бот получит в onUpdateReceived)
+            tg.showAlert('Заказ отправлен!');
+            cart = [];
+            updateCart();
+        }
 
-    document.getElementById(id).classList.add('active');
-    el.classList.add('active');
-  }
-
-  function add(name, price) {
-    cart.push({ name, price });
-    tg.showPopup({
-      title: "Добавлено",
-      message: name + " добавлено в корзину",
-      buttons: [{ type: "ok" }]
-    });
-  }
-
-  tg.MainButton.setText("Оформить заказ");
-  tg.MainButton.show();
-
-  tg.MainButton.onClick(() => {
-    tg.sendData(JSON.stringify(cart));
-  });
-</script>
-
+        displayProducts();
+    </script>
 </body>
 </html>
