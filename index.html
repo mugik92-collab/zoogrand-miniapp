@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZooGrand — Натуральные лакомства для собак, лежанки, передержка в Москве</title>
+    <title>ZooGrand73 — Натуральные лакомства, лежанки и передержка собак в Ульяновске</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -66,7 +66,7 @@
 </head>
 <body>
 
-<header>ZooGrand — Натуральные лакомства, лежанки и передержка для собак в Москве</header>
+<header>ZooGrand73 — Натуральные лакомства, лежанки и передержка собак в Ульяновске</header>
 
 <div class="container">
 
@@ -123,7 +123,7 @@
     <div class="modal-content">
         <h3>Оформление заказа</h3>
         <label>Комментарий / пожелания:</label>
-        <textarea id="orderComment" placeholder="Порода, кличка, аллергии, время доставки и т.д..."></textarea>
+        <textarea id="orderComment" placeholder="Порода, кличка, аллергии, адрес в Ульяновске и т.д..."></textarea>
 
         <div class="modal-buttons">
             <button class="modal-btn cancel" onclick="closeOrderModal()">Отмена</button>
@@ -139,29 +139,29 @@
     if (tg.colorScheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
     const products = [
-        // Лежанки (5) — как раньше
-        {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:800, desc:"60×45 см, бортик 8–12 см\nХоллофайбер, Оксфорд 600D PU\nБюджетная, лёгкая, для мелких собак до 15 кг", utp:"Самая доступная лежанка для маленьких пород — лёгкая и прочная", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6807648889.jpg"},
-        {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, desc:"Диаметр 70–100 см, бортик 18–25 см\nХоллофайбер + силикон, Велюр/плюш\nУютная для мелких–средних собак до 30 кг", utp:"Пончик-лежанка — собака зарывается и чувствует себя в безопасности", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
-        {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, desc:"80×60 – 120×80 см, бортик 12–18 см\nОртопедическая пена HR + холлофайбер\nДля суставов, пожилых собак до 50 кг", utp:"Ортопедическая поддержка суставов — спасение для пожилых питомцев", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
-        {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, desc:"90×70 – 130×90 см, бортик 20–30 см\nОртопедическая пена + memory foam\nРоскошь для крупных собак до 70 кг", utp:"Премиум-диван для собак — роскошь и комфорт в вашем интерьере", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
-        {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, desc:"120×90 – 160×110 см\nОртопедическая пена 10–15 см, Кордура/нейлон\nДля гигантов 45+ кг, моется шлангом", utp:"Гигантский матрас — идеален для вольеров и очень крупных пород", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
+        // Лежанки (5)
+        {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:800, desc:"60×45 см, бортик 8–12 см\nХоллофайбер, Оксфорд 600D PU\nБюджетная, лёгкая, для мелких собак до 15 кг", utp:"Самая доступная лежанка для маленьких пород в Ульяновске", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800"},
+        {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, desc:"Диаметр 70–100 см, бортик 18–25 см\nХоллофайбер + силикон, Велюр/плюш\nУютная для мелких–средних собак до 30 кг", utp:"Пончик-лежанка — собака зарывается и чувствует себя в безопасности", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800"},
+        {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, desc:"80×60 – 120×80 см, бортик 12–18 см\nОртопедическая пена HR + холлофайбер\nДля суставов, пожилых собак до 50 кг", utp:"Ортопедическая поддержка суставов — спасение для пожилых питомцев", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=800"},
+        {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, desc:"90×70 – 130×90 см, бортик 20–30 см\nОртопедическая пена + memory foam\nРоскошь для крупных собак до 70 кг", utp:"Премиум-диван для собак — роскошь и комфорт в вашем интерьере", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800"},
+        {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, desc:"120×90 – 160×110 см\nОртопедическая пена 10–15 см, Кордура/нейлон\nДля гигантов 45+ кг, моется шлангом", utp:"Гигантский матрас — идеален для вольеров и очень крупных пород", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45?w=800"},
 
-        // Передержка (6) — как раньше
-        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йорк, той-терьер, померанский шпиц мини и др.\nГруппа до 8 собак, мало едят", utp:"Групповая передержка мини-пород — весело и недорого", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a"},
-        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–12 кг\nШи-тцу, пекинес, той-пудель, бишон и др.\nСовместимы в группе, частое вычесывание", utp:"Уход за шерстью включён — идеально для длинношёрстных малышей", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"},
-        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел, корги, такса, бигль и др.\nАктивный выгул, много движения", utp:"Ежедневные активные прогулки — для энергичных пород", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b"},
-        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–30 кг\nХаски, лабрадор молодые, далматин и др.\nТщательная совместимость", utp:"Безопасная передержка даже для возбудимых пород", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb"},
-        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–50 кг\nОвчарка, ротвейлер, доберман и др.\nОтдельный вольер", utp:"Индивидуальный вольер + нагрузки для крупных собак", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45"},
-        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nАлабай, мастиф, сенбернар и др.\nОтдельный выгул", utp:"Специальная передержка гигантов — безопасность и большой корм", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36"},
+        // Передержка (6)
+        {id:13, category:"Передержка", sub:"Мини / Той", price:650, desc:"до 28–30 см, до 3–5 кг\nЧихуахуа, йорк, той-терьер, померанский шпиц мини и др.\nГруппа до 8 собак, мало едят", utp:"Групповая передержка мини-пород в Ульяновске — весело и недорого", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a?w=800"},
+        {id:14, category:"Передержка", sub:"Маленькие", price:900, desc:"28–40 см, 5–12 кг\nШи-тцу, пекинес, той-пудель, бишон и др.\nСовместимы в группе, частое вычесывание", utp:"Уход за шерстью включён — идеально для длинношёрстных малышей", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800"},
+        {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, desc:"35–50 см, 10–18 кг\nДжек-рассел, корги, такса, бигль и др.\nАктивный выгул, много движения", utp:"Ежедневные активные прогулки — для энергичных пород", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=800"},
+        {id:16, category:"Передержка", sub:"Средние", price:1300, desc:"40–58 см, 15–30 кг\nХаски, лабрадор молодые, далматин и др.\nТщательная совместимость", utp:"Безопасная передержка даже для возбудимых пород", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800"},
+        {id:17, category:"Передержка", sub:"Крупные", price:1900, desc:"58–70 см, 28–50 кг\nОвчарка, ротвейлер, доберман и др.\nОтдельный вольер", utp:"Индивидуальный вольер + нагрузки для крупных собак", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45?w=800"},
+        {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, desc:"70+ см, 45–90+ кг\nАлабай, мастиф, сенбернар и др.\nОтдельный выгул", utp:"Специальная передержка гигантов в Ульяновске — безопасность и большой корм", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36?w=800"},
 
         // Вкусняшки — 7 подкатегорий
-        {id:19, category:"Вкусняшки", sub:"Легкое говяжье 100 г", price:100, desc:"Сушёное говяжье лёгкое 100 грамм\nНизкокалорийное лакомство для дрессировки и ежедневного поощрения", utp:"Лёгкое и полезное — идеально для собак на контроле веса", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6807648889.jpg"},
-        {id:20, category:"Вкусняшки", sub:"Рубец говяжий 100 г", price:100, desc:"Сушёный говяжий рубец 100 грамм\nНатуральный источник ферментов для пищеварения", utp:"Улучшает микрофлору кишечника — лучшее для ЖКТ", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
-        {id:21, category:"Вкусняшки", sub:"Вымя говяжье", price:110, desc:"Сушёное говяжье вымя\nПлотное лакомство для чистки зубов", utp:"Натуральный зубной скребок — чистит зубы без химии", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"},
-        {id:22, category:"Вкусняшки", sub:"Трахея говяжья", price:130, desc:"Сушёная говяжья трахея\nИсточник хондроитина для суставов", utp:"Поддержка суставов и связок — для активных и пожилых собак", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193321.jpg"},
-        {id:23, category:"Вкусняшки", sub:"Бычьи семенники", price:150, desc:"Сушёные бычьи семенники\nВысокобелковое лакомство", utp:"Повышает энергию и тестостерон — для кобелей и активных собак", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927435.jpg"},
-        {id:24, category:"Вкусняшки", sub:"Бычий корень", price:230, desc:"Сушёный бычий корень\nОчень твёрдое долговечное лакомство", utp:"Долго грызёт — снимает стресс и чистит зубы", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6429193313.jpg"},
-        {id:25, category:"Вкусняшки", sub:"Говяжьи почки", price:100, desc:"Сушёные говяжьи почки\nНизкокалорийное очищающее лакомство", utp:"Детокс для почек — натуральный и полезный", imageUrl:"https://ir.ozone.ru/s3/multimedia-1/wc1200/6284927428.jpg"}
+        {id:19, category:"Вкусняшки", sub:"Легкое говяжье 100 г", price:100, desc:"Сушёное говяжье лёгкое 100 грамм\nНизкокалорийное лакомство для дрессировки и ежедневного поощрения", utp:"Лёгкое и полезное — идеально для собак на контроле веса", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800"},
+        {id:20, category:"Вкусняшки", sub:"Рубец говяжий 100 г", price:100, desc:"Сушёный говяжий рубец 100 грамм\nНатуральный источник ферментов для пищеварения", utp:"Улучшает микрофлору кишечника — лучшее для ЖКТ", imageUrl:"https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=800"},
+        {id:21, category:"Вкусняшки", sub:"Вымя говяжье", price:110, desc:"Сушёное говяжье вымя\nПлотное лакомство для чистки зубов", utp:"Натуральный зубной скребок — чистит зубы без химии", imageUrl:"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800"},
+        {id:22, category:"Вкусняшки", sub:"Трахея говяжья", price:130, desc:"Сушёная говяжья трахея\nИсточник хондроитина для суставов", utp:"Поддержка суставов и связок — для активных и пожилых собак", imageUrl:"https://images.unsplash.com/photo-1567752881297-894d9ec55f45?w=800"},
+        {id:23, category:"Вкусняшки", sub:"Бычьи семенники", price:150, desc:"Сушёные бычьи семенники\nВысокобелковое лакомство", utp:"Повышает энергию и тестостерон — для кобелей и активных собак", imageUrl:"https://images.unsplash.com/photo-1561948955-570b270e7c36?w=800"},
+        {id:24, category:"Вкусняшки", sub:"Бычий корень", price:230, desc:"Сушёный бычий корень\nОчень твёрдое долговечное лакомство", utp:"Долго грызёт — снимает стресс и чистит зубы", imageUrl:"https://images.unsplash.com/photo-1617890686219-509e1a05969a?w=800"},
+        {id:25, category:"Вкусняшки", sub:"Говяжьи почки", price:100, desc:"Сушёные говяжьи почки\nНизкокалорийное очищающее лакомство", utp:"Детокс для почек — натуральный и полезный", imageUrl:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800"}
     ];
 
     let cart = [];
@@ -190,7 +190,7 @@
             card.className = 'subcategory-card animate-fadeInUp';
             card.style.animationDelay = `${i * 0.1}s`;
             card.innerHTML = `
-                <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub} — купить в ZooGrand" onerror="this.src='https://via.placeholder.com/400x180?text=${item.sub}'">
+                <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub} — купить в ZooGrand73 Ульяновск" onerror="this.src='https://via.placeholder.com/400x180?text=${item.sub}'">
                 <div class="subcategory-content">
                     <h3>${item.sub}</h3>
                     <div class="utp">${item.utp}</div>
@@ -212,7 +212,7 @@
         const isOverexposure = item.category === 'Передержка';
 
         document.getElementById('dateFields').classList.toggle('hidden', !isOverexposure);
-        document.getElementById('nightsInfo').classList.toggle('hidden', false); // всегда показываем кол-во
+        document.getElementById('nightsInfo').classList.toggle('hidden', false);
         document.getElementById('qtyPanel').classList.toggle('hidden', isOverexposure);
 
         if (isOverexposure) {
@@ -245,7 +245,7 @@
             discount = quantity >= 10 ? 0.1 : 0;
             discountText = 'Скидка 10% за 10+ суток!';
         } else if (currentItem.category === 'Вкусняшки') {
-            discount = quantity >= 5 ? 0.05 : 0; // от 500 г (5 упаковок)
+            discount = quantity >= 5 ? 0.05 : 0; // от 500 г
             discountText = 'Скидка 5% от 500 грамм!';
         }
 
@@ -343,7 +343,7 @@
 
     function sendOrder() {
         const comment = document.getElementById('orderComment').value.trim();
-        let text = 'Заказ из ZooGrand\n\n';
+        let text = 'Заказ из ZooGrand73 (Ульяновск)\n\n';
 
         cart.forEach(item => {
             let line = `${item.product.sub} × ${item.quantity}`;
@@ -362,7 +362,6 @@
         closeOrderModal();
     }
 
-    // Старт
     updateCart();
 </script>
 </body>
