@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; }
+        body { margin:0; font-family:system-ui; background:#f8f9fa; color:#2d2d2d; min-height:100vh; }
         header { background:linear-gradient(135deg,#ff9800,#e67e22); color:white; text-align:center; padding:1rem; font-size:1.4rem; font-weight:700; }
         .container { padding:1rem; padding-bottom:140px; }
 
@@ -20,11 +20,11 @@
         .category-card i { font-size:2.6rem; margin-bottom:0.6rem; color:#ff9800; }
 
         .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; }
-        .subcategory-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px #0002; cursor:pointer; transition:all 0.3s; }
+        .subcategory-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px #0002; cursor:pointer; transition:all 0.3s; display:flex; flex-direction:column; }
         .subcategory-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px #0004; }
-        .subcategory-img { width:100%; height:180px; object-fit:cover; background:#eee; }
-        .subcategory-content { padding:1rem; }
-        .price { color:#ff9800; font-weight:700; font-size:1.3rem; }
+        .subcategory-img { width:100%; height:180px; object-fit:cover; background:#eee; flex-shrink:0; }
+        .subcategory-content { padding:1rem; flex-grow:1; display:flex; flex-direction:column; justify-content:space-between; }
+        .price { color:#ff9800; font-weight:700; font-size:1.3rem; margin-top:auto; }
 
         .back-btn, .add-btn { padding:0.8rem 1.4rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; }
         .back-btn { background:#e0e0e0; color:#333; }
@@ -86,48 +86,56 @@
     const tg = window.Telegram.WebApp;
     tg.ready(); tg.expand();
 
+    // Минимальный набор данных (без внешних картинок — используем placeholder)
     const categories = {
         "Лежанки": [
-            {sub:"Лежанка-овал Эконом", price:800, image:"https://picsum.photos/400/180?random=1"},
-            {sub:"Лежанка-пончик Классик", price:1200, image:"https://picsum.photos/400/180?random=2"},
-            {sub:"Лежанка Ортопед", price:1400, image:"https://picsum.photos/400/180?random=3"},
-            {sub:"Лежанка-дивана Премиум", price:1500, image:"https://picsum.photos/400/180?random=4"},
-            {sub:"Лежанка-матрас Гигант", price:1600, image:"https://picsum.photos/400/180?random=5"}
+            {sub:"Лежанка-овал Эконом", price:800},
+            {sub:"Лежанка-пончик Классик", price:1200},
+            {sub:"Лежанка Ортопед", price:1400},
+            {sub:"Лежанка-дивана Премиум", price:1500},
+            {sub:"Лежанка-матрас Гигант", price:1600}
         ],
         "Передержка": [
-            {sub:"Мини / Той", price:650, image:"https://picsum.photos/400/180?random=6"},
-            {sub:"Маленькие", price:900, image:"https://picsum.photos/400/180?random=7"},
-            {sub:"Маленькие-средние", price:1100, image:"https://picsum.photos/400/180?random=8"},
-            {sub:"Средние", price:1300, image:"https://picsum.photos/400/180?random=9"},
-            {sub:"Крупные", price:1900, image:"https://picsum.photos/400/180?random=10"},
-            {sub:"Очень крупные / Гиганты", price:3500, image:"https://picsum.photos/400/180?random=11"}
+            {sub:"Мини / Той", price:650},
+            {sub:"Маленькие", price:900},
+            {sub:"Маленькие-средние", price:1100},
+            {sub:"Средние", price:1300},
+            {sub:"Крупные", price:1900},
+            {sub:"Очень крупные / Гиганты", price:3500}
         ],
         "Вкусняшки": [
-            {sub:"Легкое говяжье 100 г", price:100, image:"https://picsum.photos/400/180?random=12"},
-            {sub:"Рубец говяжий 100 г", price:100, image:"https://picsum.photos/400/180?random=13"},
-            {sub:"Вымя говяжье", price:110, image:"https://picsum.photos/400/180?random=14"},
-            {sub:"Трахея говяжья", price:130, image:"https://picsum.photos/400/180?random=15"},
-            {sub:"Бычьи семенники", price:150, image:"https://picsum.photos/400/180?random=16"},
-            {sub:"Бычий корень", price:230, image:"https://picsum.photos/400/180?random=17"},
-            {sub:"Говяжьи почки", price:100, image:"https://picsum.photos/400/180?random=18"}
+            {sub:"Легкое говяжье 100 г", price:100},
+            {sub:"Рубец говяжий 100 г", price:100},
+            {sub:"Вымя говяжье", price:110},
+            {sub:"Трахея говяжья", price:130},
+            {sub:"Бычьи семенники", price:150},
+            {sub:"Бычий корень", price:230},
+            {sub:"Говяжьи почки", price:100}
         ]
     };
 
     let cart = [];
 
     function showCategory(cat) {
+        console.log("Открываем категорию:", cat); // для отладки
         document.getElementById('mainScreen').classList.add('hidden');
         document.getElementById('categoryScreen').classList.remove('hidden');
         document.getElementById('categoryTitle').textContent = cat;
 
         const grid = document.getElementById('subcategoryGrid');
-        grid.innerHTML = '';
+        grid.innerHTML = ''; // очищаем
 
-        (categories[cat] || []).forEach(item => {
+        const items = categories[cat] || [];
+        if (items.length === 0) {
+            grid.innerHTML = '<p style="text-align:center;color:#999;">Нет товаров в этой категории</p>';
+            return;
+        }
+
+        items.forEach(item => {
             const card = document.createElement('div');
             card.className = 'subcategory-card';
             card.innerHTML = `
-                <img src="${item.image}" style="width:100%;height:180px;object-fit:cover;">
+                <img src="https://placehold.co/400x180?text=${encodeURIComponent(item.sub)}" style="width:100%;height:180px;object-fit:cover;background:#eee;">
                 <div class="subcategory-content">
                     <h3>${item.sub}</h3>
                     <div class="price">${item.price} ₽</div>
@@ -146,8 +154,8 @@
     }
 
     function updateCart() {
-        const count = cart.reduce((s, e) => s + e.quantity, 0);
-        const total = cart.reduce((s, e) => s + e.quantity * e.price, 0);
+        const count = cart.reduce((s, e) => s + (e.quantity || 0), 0);
+        const total = cart.reduce((s, e) => s + (e.quantity || 0) * (e.price || 0), 0);
         document.getElementById('cartCount').textContent = count;
         document.getElementById('cartTotal').textContent = total.toFixed(0) + ' ₽';
         document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
