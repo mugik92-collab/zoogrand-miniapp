@@ -2,62 +2,281 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZooGrand Меню</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZooGrand — Твой питомец в надёжных руках</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background: #f0f0f0; }
-        h1 { text-align: center; }
-        h2 { margin-top: 20px; }
-        .category-btn { width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; background: #4CAF50; color: white; border: none; cursor: pointer; }
-        .product { border: 1px solid #ccc; padding: 10px; margin: 10px 0; background: white; }
-        .product img { width: 100%; height: auto; margin-bottom: 10px; }
-        .product input { width: 50px; margin-right: 10px; }
-        .product button { background: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-        #cart { margin-top: 20px; }
-        #contacts { margin-top: 20px; padding: 10px; background: #e0e0e0; }
-        #orderBtn { display: none; width: 100%; padding: 10px; background: #2196F3; color: white; border: none; font-size: 16px; }
-        #backBtn { width: 100%; padding: 10px; background: #ccc; color: black; border: none; font-size: 16px; margin-bottom: 20px; }
-        .hidden { display: none; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        .animate-fadeInUp:nth-child(1) { animation-delay: 0.1s; }
+        .animate-fadeInUp:nth-child(2) { animation-delay: 0.2s; }
+        .animate-fadeInUp:nth-child(3) { animation-delay: 0.3s; }
+
+        :root {
+            --bg: #f8f9fa; --card: #ffffff; --text: #333;
+            --accent: #ff9800; --accent-dark: #e68900;
+            --green: #4caf50; --gray: #757575; --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --danger: #f44336;
+        }
+        [data-theme="dark"] {
+            --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --gray: #aaaaaa;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin:0; padding:0; background:var(--bg); color:var(--text); min-height:100vh; }
+        header { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color:white; text-align:center; padding:16px; font-size:1.4em; font-weight:600; }
+        .container { padding:16px; }
+        .category-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0; }
+        .category-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); text-align:center; padding:20px 10px; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; }
+        .category-card:hover { transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+        .category-card i { font-size:2.8em; margin-bottom:12px; color:var(--accent); }
+        .product-grid { display:grid; grid-template-columns:1fr; gap:16px; }
+        .product-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); transition:transform 0.15s; }
+        .product-card:hover { transform:translateY(-6px); }
+        .product-img { width:100%; height:180px; object-fit:cover; }
+        .product-info { padding:12px; }
+        .product-title { font-size:1.1em; margin:0 0 6px; font-weight:600; }
+        .product-desc { font-size:0.85em; color:var(--gray); margin:0 0 10px; line-height:1.4; }
+        .price { font-weight:bold; color:var(--accent); font-size:1.1em; }
+        .qty-control { display:flex; align-items:center; gap:12px; margin:12px 0; }
+        .qty-btn { width:36px; height:36px; border-radius:50%; background:#eee; border:none; font-size:1.2em; cursor:pointer; }
+        .qty-input { width:50px; text-align:center; border:1px solid #ddd; border-radius:8px; padding:6px; }
+        .add-btn { background:var(--green); color:white; border:none; padding:10px 16px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%; transition:background 0.2s; }
+        .add-btn:hover { background:#43a047; }
+        #cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); box-shadow:0 -4px 12px rgba(0,0,0,0.1); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; z-index:100; }
+        #cart-bar.hidden { display:none; }
+        #orderBtn { background:var(--accent); color:white; border:none; padding:12px 24px; border-radius:12px; font-size:1.1em; font-weight:bold; cursor:pointer; }
+        .back-btn { background:#e0e0e0; color:#333; border:none; padding:10px 16px; border-radius:12px; cursor:pointer; margin-bottom:16px; font-weight:500; }
+        .hidden { display:none !important; }
+
+        /* Свайп для удаления в корзине */
+        .cart-item { position:relative; overflow:hidden; transition:transform 0.3s ease; touch-action:pan-y; }
+        .cart-item.swiped { transform:translateX(-80px); }
+        .delete-btn { position:absolute; right:0; top:0; bottom:0; width:80px; background:var(--danger); color:white; display:flex; align-items:center; justify-content:center; font-size:1.2em; cursor:pointer; transform:translateX(100%); transition:transform 0.3s ease; }
+        .cart-item.swiped .delete-btn { transform:translateX(0); }
+
+        /* Модалка комментария и дат */
+        #modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:200; }
+        .modal-content { background:var(--card); border-radius:16px; padding:24px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+        .modal-title { font-size:1.3em; margin-bottom:16px; }
+        textarea, input[type="date"] { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px; font-size:1em; }
+        .modal-buttons { display:flex; gap:12px; margin-top:20px; }
+        .modal-btn { flex:1; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; }
+        .confirm { background:var(--accent); color:white; border:none; }
+        .cancel { background:#ccc; color:#333; border:none; }
     </style>
 </head>
 <body>
-    <h1>ZooGrand Меню</h1>
-    
-    <!-- Главный экран -->
+
+<header>ZooGrand — Забота о питомце</header>
+
+<div class="container">
+
     <div id="mainScreen">
-        <button class="category-btn" onclick="showCategory('Лежанки')">Лежанки</button>
-        <button class="category-btn" onclick="showCategory('Передержка')">Передержка</button>
-        <button class="category-btn" onclick="showCategory('Вкусняшки')">Вкусняшки</button>
+        <div class="category-grid">
+            <div class="category-card animate-fadeInUp" onclick="showCategory('Лежанки')"><i class="fas fa-bed"></i><div>Лежанки</div></div>
+            <div class="category-card animate-fadeInUp" onclick="showCategory('Передержка')"><i class="fas fa-paw"></i><div>Передержка</div></div>
+            <div class="category-card animate-fadeInUp" onclick="showCategory('Вкусняшки')"><i class="fas fa-bone"></i><div>Вкусняшки</div></div>
+        </div>
     </div>
-    
-    <!-- Экран категории -->
+
     <div id="categoryScreen" class="hidden">
-        <button id="backBtn" onclick="backToMain()">Назад</button>
-        <div id="categoryProducts"></div>
+        <button class="back-btn" onclick="backToMain()">← Назад</button>
+        <h2 id="categoryTitle"></h2>
+        <div id="productGrid" class="product-grid"></div>
     </div>
-    
-    <div id="cart">
-        <h2>Корзина</h2>
-        <ul id="cartItems"></ul>
-        <p>Итого: <span id="total">0</span> руб.</p>
-    </div>
-    <div id="contacts">
-        <h2>Контакты</h2>
-        <p>Адрес: Ул. Примерная, 123, Москва</p>  <!-- Измени здесь -->
-        <p>Телефон: +7 (123) 456-78-90</p>     <!-- Измени здесь -->
-        <p>Email: info@zoogrand.ru</p>         <!-- Измени здесь -->
-    </div>
-    <button id="orderBtn" onclick="placeOrder()">Заказать</button>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+</div>
 
-        // Массив продуктов с imageUrl и unit (для калькулятора: 'шт' или 'сутки')
-        const products = [
-            // Вкусняшки
-            { id: 1, category: 'Вкусняшки', name: 'Сушеные вкусняшки из субпродуктов - легкое говяжье', price: 100, desc: '100 грамм, легкое говяжье', imageUrl: 'https://pets-best.de/wp-content/uploads/2016/07/rinderlunge.gif', unit: 'шт' },
-            { id: 2, category: 'Вкусняшки', name: 'Сушеные вкусняшки из субпродуктов - рубец говяжий', price: 100, desc: '100 грамм, рубец говяжий', imageUrl: 'https://i.ebayimg.com/images/g/F3wAAOSworBhXcJU/s-l1200.png', unit: 'шт' },
-            { id: 3, category: 'Вкусняшки', name: 'Сушеные вкусняшки из субпродуктов - Вымя говяжье', price: 110, desc: '1 шт, Вымя говяжье', imageUrl: 'https://c8.alamy.com/comp/2G
+<div id="cart-bar" class="hidden">
+    <div id="cart-summary">Корзина: <span id="cartCount">0</span> • <span id="cartTotal">0 руб.</span></div>
+    <button id="orderBtn" onclick="showOrderModal()">Оформить</button>
+</div>
+
+<!-- Модальное окно оформления -->
+<div id="modal" class="hidden">
+    <div class="modal-content">
+        <div class="modal-title">Оформление заказа</div>
+        
+        <div id="dateSection" class="hidden">
+            <label>Заезд:</label>
+            <input type="date" id="checkIn" min="">
+            <label>Выезд:</label>
+            <input type="date" id="checkOut" min="">
+        </div>
+        
+        <label>Комментарий (не обязательно):</label>
+        <textarea id="comment" rows="4" placeholder="Особые пожелания, порода, кличка и т.д..."></textarea>
+        
+        <div class="modal-buttons">
+            <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
+            <button class="modal-btn confirm" onclick="confirmOrder()">Отправить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    if (tg.colorScheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+    // Вставь сюда свой массив products из предыдущей версии
+    const products = [ /* ... полный массив с id, category, name, price, desc, imageUrl, unit ... */ ];
+
+    let cart = []; // [{product, quantity, checkIn?, checkOut?, nights?}]
+
+    function showCategory(category) {
+        document.getElementById('mainScreen').classList.add('hidden');
+        document.getElementById('categoryScreen').classList.remove('hidden');
+        document.getElementById('categoryTitle').textContent = category;
+
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+
+        products.filter(p => p.category === category).forEach((product, i) => {
+            const card = document.createElement('div');
+            card.className = 'product-card animate-fadeInUp';
+            card.style.animationDelay = `${i * 0.1}s`;
+            let extra = '';
+            if (category === 'Передержка') {
+                extra = `<small style="color:var(--accent);">Выберите даты при добавлении</small>`;
+            }
+            card.innerHTML = `
+                <img class="product-img" src="${product.imageUrl}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x180?text=${product.name}'">
+                <div class="product-info">
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-desc">${product.desc}</div>
+                    <div class="price">${product.price} ₽ / ${product.unit}</div>
+                    ${extra}
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+                        <input type="number" class="qty-input" value="1" min="1" data-id="${product.id}">
+                        <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                    </div>
+                    <button class="add-btn" onclick="addToCart(${product.id})">В корзину</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function changeQty(btn, delta) {
+        const input = btn.parentElement.querySelector('.qty-input');
+        let val = parseInt(input.value) || 1;
+        input.value = Math.max(1, val + delta);
+    }
+
+    function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        const input = document.querySelector(`input[data-id="${id}"]`);
+        let quantity = parseInt(input.value) || 1;
+        let extraData = {};
+
+        if (product.category === 'Передержка') {
+            // Показываем даты только для передержки
+            const checkIn = prompt("Дата заезда (YYYY-MM-DD):") || new Date().toISOString().split('T')[0];
+            const checkOut = prompt("Дата выезда (YYYY-MM-DD):") || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            
+            const inDate = new Date(checkIn);
+            const outDate = new Date(checkOut);
+            const nights = Math.max(1, Math.ceil((outDate - inDate) / 86400000));
+            
+            quantity = nights; // Кол-во = кол-во суток
+            extraData = { checkIn, checkOut, nights };
+        }
+
+        const existing = cart.find(item => item.product.id === id);
+        if (existing) {
+            existing.quantity += quantity;
+            if (extraData.nights) existing.extra = extraData;
+        } else {
+            cart.push({ product, quantity, extra: extraData });
+        }
+
+        input.value = 1;
+        updateCart();
+        tg.showPopup({message: `Добавлено: ${quantity} × ${product.name}`});
+    }
+
+    function updateCart() {
+        let count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        let total = cart.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
+
+        document.getElementById('cartCount').textContent = count;
+        document.getElementById('cartTotal').textContent = total + ' ₽';
+        document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
+
+        // Здесь можно обновить визуальный список корзины, если хочешь полный список
+    }
+
+    function backToMain() {
+        document.getElementById('categoryScreen').classList.add('hidden');
+        document.getElementById('mainScreen').classList.remove('hidden');
+    }
+
+    function showOrderModal() {
+        document.getElementById('modal').classList.remove('hidden');
+        // Если в корзине есть Передержка — показываем даты (но уже выбраны при добавлении)
+        const hasOverexposure = cart.some(item => item.product.category === 'Передержка');
+        document.getElementById('dateSection').classList.toggle('hidden', !hasOverexposure);
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.add('hidden');
+    }
+
+    function confirmOrder() {
+        const comment = document.getElementById('comment').value.trim();
+        let text = 'Заказ в ZooGrand:\n\n';
+        let total = 0;
+
+        cart.forEach(item => {
+            const sub = item.quantity * item.product.price;
+            let line = `${item.product.name} × ${item.quantity} ${item.product.unit} — ${sub} ₽`;
+            if (item.extra?.checkIn) {
+                line += ` (заезд: ${item.extra.checkIn}, выезд: ${item.extra.checkOut})`;
+            }
+            text += line + '\n';
+            total += sub;
+        });
+        text += `\nИтого: ${total} ₽`;
+        if (comment) text += `\n\nКомментарий: ${comment}`;
+
+        tg.sendData(text);
+        tg.showAlert('Заказ отправлен! Скоро свяжемся.');
+        cart = [];
+        updateCart();
+        closeModal();
+    }
+
+    // Свайп для удаления (добавь в updateCart визуализацию корзины если нужно)
+    // Пока реализовано только на уровне стилей — для полноценного списка корзины добавь div#cartList
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+    document.addEventListener('touchend', handleTouchEnd, false);
+
+    let xDown = null;
+    function handleTouchStart(evt) { xDown = evt.touches[0].clientX; }
+    function handleTouchMove(evt) {
+        if (!xDown) return;
+        let xDiff = xDown - evt.touches[0].clientX;
+        if (xDiff > 50) { // свайп влево
+            const item = evt.target.closest('.cart-item');
+            if (item) item.classList.add('swiped');
+        }
+    }
+    function handleTouchEnd() {
+        xDown = null;
+    }
+
+    // Для удаления — добавь onclick на .delete-btn в будущем списке корзины
+    updateCart();
+</script>
+</body>
+</html>
