@@ -1,249 +1,88 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ZooGrand73 — Ульяновск</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --accent: #ff9800;
-      --accent-dark: #e67e22;
-      --green: #4caf50;
-      --gray: #666;
-      --danger: #e74c3c;
+      --bg: #f8f9fa; --card: #ffffff; --text: #2d2d2d;
+      --accent: #ff9800; --accent-dark: #e67e22;
+      --green: #4caf50; --gray: #666; --danger: #e74c3c;
       --shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
-
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f8f9fa;
-      color: #2d2d2d;
-      min-height: 100vh;
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: 700;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    .container {
-      padding: 1rem;
-      padding-bottom: 140px;
-    }
+    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    header { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:white; text-align:center; padding:1.2rem; font-size:1.5rem; font-weight:700; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+    .container { padding:1rem; padding-bottom:140px; }
 
     /* Баннер */
-    .banner-container {
-      position: relative;
-      height: 300px;
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-      border-radius: 0 0 24px 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
+    .banner-container { position:relative; height:300px; margin-bottom:1.5rem; overflow:hidden; border-radius:0 0 24px 24px; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+    .main-banner { width:100%; height:100%; object-fit:cover; }
+    .banner-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:white; text-shadow:0 4px 12px #0008; z-index:2; width:90%; }
+    .banner-title { font-size:2.4rem; font-weight:900; margin:0 0 0.5rem; opacity:0; animation:textSlideTop 1s ease-out forwards 0.6s; }
+    .banner-subtitle { font-size:1.6rem; font-weight:700; color:#ffe066; opacity:0; animation:textSlideBottom 1s ease-out forwards 1s; }
 
-    .main-banner {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    @keyframes textSlideTop { from { opacity:0; transform:translateY(-50px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes textSlideBottom { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
 
-    .banner-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.7);
-      z-index: 2;
-      width: 90%;
-    }
+    /* Категории главной */
+    .category-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin:1.5rem 0; }
+    .category-card { background:var(--card); border-radius:16px; padding:1.5rem 1rem; text-align:center; box-shadow:var(--shadow); cursor:pointer; transition:all 0.25s; }
+    .category-card:hover { transform:translateY(-6px) scale(1.05); box-shadow:0 12px 24px rgba(0,0,0,0.15); }
+    .category-card i { font-size:2.8rem; margin-bottom:0.8rem; color:var(--accent); animation:iconPulse 1.2s infinite ease-in-out; }
+    .category-card div { font-weight:600; font-size:1.1rem; }
 
-    .banner-title {
-      font-size: 2.4rem;
-      font-weight: 900;
-      margin: 0 0 0.5rem;
-      opacity: 0;
-      animation: textSlideTop 1s ease-out forwards 0.6s;
-    }
-
-    .banner-subtitle {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #ffe066;
-      opacity: 0;
-      animation: textSlideBottom 1s ease-out forwards 1s;
-    }
-
-    @keyframes textSlideTop {
-      from { opacity: 0; transform: translateY(-50px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes textSlideBottom {
-      from { opacity: 0; transform: translateY(50px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Категории на главной */
-    .category-grid {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin: 1.5rem 0;
-    }
-
-    .category-card {
-      background: white;
-      border-radius: 16px;
-      padding: 1.2rem 1.6rem;
-      text-align: center;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      min-width: 110px;
-      transition: all 0.25s ease;
-    }
-
-    .category-card:hover {
-      transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-    }
-
-    .category-card i {
-      font-size: 2.6rem;
-      margin-bottom: 0.6rem;
-      color: var(--accent);
-    }
+    @keyframes iconPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.15); } }
 
     /* Подкатегории */
-    .subcategory-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.2rem;
-    }
+    .subcategory-grid { display:grid; grid-template-columns:1fr; gap:1.2rem; margin:1.5rem 0; }
+    .subcategory-card { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); transition:transform 0.25s; cursor:pointer; }
+    .subcategory-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px rgba(0,0,0,0.18); }
+    .subcategory-img { width:100%; height:180px; object-fit:cover; background:#eee; }
+    .subcategory-content { padding:1rem; }
+    .price { color:var(--accent); font-weight:700; font-size:1.3rem; margin:0.5rem 0; }
+    .utp { color:#27ae60; font-weight:700; margin:0.5rem 0; font-size:1.05rem; }
 
-    .subcategory-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+    /* Калькулятор */
+    .qty-control { display:flex; align-items:center; gap:1rem; margin:1rem 0; justify-content:center; }
+    .qty-btn { width:44px; height:44px; border-radius:50%; background:#eee; border:none; font-size:1.4rem; cursor:pointer; }
+    .qty-input { width:70px; text-align:center; font-size:1.2rem; padding:0.6rem; border:1px solid #ddd; border-radius:10px; }
+    .add-btn { background:var(--green); color:white; border:none; padding:0.9rem; border-radius:12px; font-size:1.1rem; font-weight:600; cursor:pointer; width:100%; margin-top:0.8rem; }
 
-    .subcategory-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-    }
+    .date-row { display:flex; flex-direction:column; gap:0.8rem; margin:1.2rem 0; }
+    input[type="date"] { padding:0.8rem; font-size:1rem; border:1px solid #ccc; border-radius:10px; }
 
-    .subcategory-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background: #eee;
-    }
-
-    .subcategory-content {
-      padding: 1rem;
-    }
-
-    .price {
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin: 0.5rem 0;
-    }
-
-    .utp {
-      color: #27ae60;
-      font-weight: 700;
-      margin: 0.5rem 0;
-    }
-
-    /* Кнопки */
-    .back-btn, .add-btn, .qty-btn, #orderBtn, #clearCartBtn, .modal-btn {
-      cursor: pointer;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .back-btn { background: #e0e0e0; color: #333; padding: 0.8rem 1.4rem; }
-    .add-btn { background: var(--green); color: white; padding: 0.9rem; width: 100%; }
-    .qty-btn { width: 44px; height: 44px; border-radius: 50%; background: #eee; font-size: 1.4rem; }
+    .discount { color:#27ae60; font-weight:700; margin-top:0.6rem; font-size:1.05rem; }
 
     /* Корзина */
-    #cart-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
-      padding: 0.8rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-    }
+    #cart-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); box-shadow:0 -4px 16px rgba(0,0,0,0.15); padding:0.8rem 1rem; display:flex; justify-content:space-between; align-items:center; z-index:100; font-weight:600; }
+    #clearCartBtn { background:var(--danger); color:white; border:none; padding:0.6rem 1.2rem; border-radius:10px; cursor:pointer; font-size:0.95rem; }
+    #cartList { margin:1rem 0; padding-bottom:5rem; }
+    .cart-item { background:var(--card); border-radius:12px; padding:1rem; margin-bottom:1rem; box-shadow:var(--shadow); }
+    .cart-item-title { font-weight:600; margin-bottom:0.4rem; }
+    .cart-item-details { color:var(--gray); font-size:0.95rem; }
+    .cart-item-total { font-weight:700; color:var(--accent); margin-top:0.6rem; display:block; }
 
-    #cartList { margin: 1rem 0; padding-bottom: 5rem; }
-    .cart-item { background: white; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+    .back-btn { background:#e0e0e0; color:#333; border:none; padding:0.8rem 1.4rem; border-radius:12px; cursor:pointer; font-weight:600; margin-bottom:1rem; }
+    .hidden { display:none !important; }
 
     /* Модалка */
-    #orderModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 16px;
-      padding: 1.8rem;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .hidden { display: none !important; }
+    #orderModal { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; z-index:200; }
+    .modal-content { background:var(--card); border-radius:16px; padding:1.8rem; width:92%; max-width:420px; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+    textarea { width:100%; min-height:110px; padding:0.8rem; border:1px solid #ccc; border-radius:10px; margin:0.8rem 0; font-size:1rem; }
+    .modal-buttons { display:flex; gap:1rem; margin-top:1.5rem; }
+    .modal-btn { flex:1; padding:0.9rem; border-radius:12px; font-weight:600; cursor:pointer; }
+    .confirm { background:var(--accent); color:white; border:none; }
+    .cancel { background:#ccc; color:#333; border:none; }
 
     footer {
-      position: fixed;
-      bottom: 60px;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 12px;
-      text-align: center;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      font-size: 0.9rem;
-      z-index: 90;
+      position:fixed; bottom:60px; left:0; right:0; background:var(--card); padding:12px; text-align:center;
+      box-shadow:0 -2px 10px rgba(0,0,0,0.1); font-size:0.9rem; z-index:90;
     }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      margin: 0 8px;
-      font-weight: 600;
-    }
-
-    .phone { color: #27ae60; font-weight: bold; }
+    footer a { color:var(--accent); text-decoration:none; margin:0 8px; font-weight:600; }
+    .phone { color:#27ae60; font-weight:bold; }
   </style>
 </head>
 <body>
@@ -254,10 +93,7 @@
 
   <div id="mainScreen">
     <div class="banner-container">
-      <img class="main-banner" 
-           src="https://files.catbox.moe/3m4j1k.jpg" 
-           alt="Счастливые питомцы" 
-           loading="eager">
+      <img class="main-banner" src="https://files.catbox.moe/3m4j1k.jpg" alt="Счастливые питомцы" loading="eager">
       <div class="banner-text">
         <div class="banner-title">СЧАСТЛИВЫЕ ПИТОМЦЫ</div>
         <div class="banner-subtitle">– СЧАСТЛИВАЯ СЕМЬЯ!</div>
@@ -265,15 +101,9 @@
     </div>
 
     <div class="category-grid">
-      <div class="category-card" onclick="showCategory('Лежанки')">
-        <i class="fas fa-bed"></i><div>Лежанки</div>
-      </div>
-      <div class="category-card" onclick="showCategory('Передержка')">
-        <i class="fas fa-paw"></i><div>Передержка</div>
-      </div>
-      <div class="category-card" onclick="showCategory('Вкусняшки')">
-        <i class="fas fa-bone"></i><div>Вкусняшки</div>
-      </div>
+      <div class="category-card" onclick="showCategory('Лежанки')"><i class="fas fa-bed"></i><div>Лежанки</div></div>
+      <div class="category-card" onclick="showCategory('Передержка')"><i class="fas fa-paw"></i><div>Передержка</div></div>
+      <div class="category-card" onclick="showCategory('Вкусняшки')"><i class="fas fa-bone"></i><div>Вкусняшки</div></div>
     </div>
   </div>
 
@@ -286,16 +116,23 @@
     <div id="calcPanel" class="hidden">
       <h3 id="calcTitle"></h3>
 
+      <div class="date-row" id="dateFields" style="display:none;">
+        <label>Заезд:</label>
+        <input type="date" id="checkIn" onchange="updateCalc()">
+        <label>Выезд:</label>
+        <input type="date" id="checkOut" onchange="updateCalc()">
+      </div>
+
       <div class="qty-control" id="qtyPanel">
         <button class="qty-btn" onclick="changeQty(-1)">−</button>
         <input type="number" id="qtyInput" value="1" min="1" onchange="updateCalc()">
         <button class="qty-btn" onclick="changeQty(1)">+</button>
       </div>
 
-      <div id="nightsInfo" style="font-size:1.1rem; margin:1rem 0;">
+      <div id="nightsInfo" style="font-size:1.1rem;margin:1rem 0;">
         Кол-во: <strong id="qtyDisplay">1</strong> • Сумма: <strong id="calcPrice">0 ₽</strong>
       </div>
-      <div id="discountBlock" style="color:#27ae60; font-weight:700; margin-top:0.5rem; font-size:1.05rem;"></div>
+      <div id="discountBlock" class="discount"></div>
 
       <button class="add-btn" onclick="addToCartFromCalc()">Добавить в корзину</button>
     </div>
@@ -328,9 +165,9 @@
     <label>Комментарий / пожелания:</label>
     <textarea id="orderComment" placeholder="Порода, кличка, аллергии, адрес в Ульяновске..."></textarea>
 
-    <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-      <button class="modal-btn" style="background:#ccc; color:#333; flex:1;" onclick="closeOrderModal()">Отмена</button>
-      <button class="modal-btn" style="background:var(--accent); color:white; flex:1;" onclick="sendOrder()">Отправить</button>
+    <div class="modal-buttons">
+      <button class="modal-btn cancel" onclick="closeOrderModal()">Отмена</button>
+      <button class="modal-btn confirm" onclick="sendOrder()">Отправить</button>
     </div>
   </div>
 </div>
@@ -339,33 +176,28 @@
   const tg = window.Telegram.WebApp;
   tg.ready(); tg.expand();
 
-  // Данные (все твои подкатегории + скидка от 500 г)
-  const products = {
-    "Лежанки": [
-      {sub:"Лежанка-овал Эконом", price:800},
-      {sub:"Лежанка-пончик Классик", price:1200},
-      {sub:"Лежанка Ортопед", price:1400},
-      {sub:"Лежанка-дивана Премиум", price:1500},
-      {sub:"Лежанка-матрас Гигант", price:1600}
-    ],
-    "Передержка": [
-      {sub:"Мини / Той", price:650},
-      {sub:"Маленькие", price:900},
-      {sub:"Маленькие-средние", price:1100},
-      {sub:"Средние", price:1300},
-      {sub:"Крупные", price:1900},
-      {sub:"Очень крупные / Гиганты", price:3500}
-    ],
-    "Вкусняшки": [
-      {sub:"Легкое говяжье 100 г", price:100},
-      {sub:"Рубец говяжий 100 г", price:100},
-      {sub:"Вымя говяжье", price:110},
-      {sub:"Трахея говяжья", price:130},
-      {sub:"Бычьи семенники", price:150},
-      {sub:"Бычий корень", price:230},
-      {sub:"Говяжьи почки", price:100}
-    ]
-  };
+  const products = [
+    {id:1, category:"Лежанки", sub:"Лежанка-овал Эконом", price:800, imageUrl:"https://picsum.photos/400/180?random=1"},
+    {id:2, category:"Лежанки", sub:"Лежанка-пончик Классик", price:1200, imageUrl:"https://picsum.photos/400/180?random=2"},
+    {id:3, category:"Лежанки", sub:"Лежанка Ортопед", price:1400, imageUrl:"https://picsum.photos/400/180?random=3"},
+    {id:4, category:"Лежанки", sub:"Лежанка-дивана Премиум", price:1500, imageUrl:"https://picsum.photos/400/180?random=4"},
+    {id:5, category:"Лежанки", sub:"Лежанка-матрас Гигант", price:1600, imageUrl:"https://picsum.photos/400/180?random=5"},
+
+    {id:13, category:"Передержка", sub:"Мини / Той", price:650, imageUrl:"https://picsum.photos/400/180?random=6"},
+    {id:14, category:"Передержка", sub:"Маленькие", price:900, imageUrl:"https://picsum.photos/400/180?random=7"},
+    {id:15, category:"Передержка", sub:"Маленькие-средние", price:1100, imageUrl:"https://picsum.photos/400/180?random=8"},
+    {id:16, category:"Передержка", sub:"Средние", price:1300, imageUrl:"https://picsum.photos/400/180?random=9"},
+    {id:17, category:"Передержка", sub:"Крупные", price:1900, imageUrl:"https://picsum.photos/400/180?random=10"},
+    {id:18, category:"Передержка", sub:"Очень крупные / Гиганты", price:3500, imageUrl:"https://picsum.photos/400/180?random=11"},
+
+    {id:19, category:"Вкусняшки", sub:"Легкое говяжье 100 г", price:100, imageUrl:"https://picsum.photos/400/180?random=12"},
+    {id:20, category:"Вкусняшки", sub:"Рубец говяжий 100 г", price:100, imageUrl:"https://picsum.photos/400/180?random=13"},
+    {id:21, category:"Вкусняшки", sub:"Вымя говяжье", price:110, imageUrl:"https://picsum.photos/400/180?random=14"},
+    {id:22, category:"Вкусняшки", sub:"Трахея говяжья", price:130, imageUrl:"https://picsum.photos/400/180?random=15"},
+    {id:23, category:"Вкусняшки", sub:"Бычьи семенники", price:150, imageUrl:"https://picsum.photos/400/180?random=16"},
+    {id:24, category:"Вкусняшки", sub:"Бычий корень", price:230, imageUrl:"https://picsum.photos/400/180?random=17"},
+    {id:25, category:"Вкусняшки", sub:"Говяжьи почки", price:100, imageUrl:"https://picsum.photos/400/180?random=18"}
+  ];
 
   let cart = [];
   let currentItem = null;
@@ -386,13 +218,13 @@
     const grid = document.getElementById('subcategoryGrid');
     grid.innerHTML = '';
 
-    const items = products[category] || [];
+    const items = products.filter(p => p.category === category);
 
-    items.forEach((item, i) => {
+    items.forEach(item => {
       const card = document.createElement('div');
       card.className = 'subcategory-card';
       card.innerHTML = `
-        <img src="https://placehold.co/400x180/eee/333?text=${encodeURIComponent(item.sub)}" alt="${item.sub}">
+        <img class="subcategory-img" src="${item.imageUrl}" alt="${item.sub}">
         <div class="subcategory-content">
           <h3>${item.sub}</h3>
           <div class="price">${item.price} ₽</div>
@@ -409,37 +241,52 @@
     document.getElementById('calcPanel').classList.remove('hidden');
     document.getElementById('calcTitle').textContent = item.sub;
 
-    document.getElementById('qtyInput').value = 1;
+    const isOverexposure = item.category === 'Передержка';
+
+    document.getElementById('dateFields').style.display = isOverexposure ? 'block' : 'none';
+    document.getElementById('qtyPanel').style.display = isOverexposure ? 'none' : 'flex';
+
+    if (isOverexposure) {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('checkIn').value = today;
+      document.getElementById('checkOut').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    } else {
+      document.getElementById('qtyInput').value = 1;
+    }
+
     updateCalc();
   }
 
   function updateCalc() {
-    let qty = parseInt(document.getElementById('qtyInput').value) || 1;
+    let qty = parseInt(document.getElementById('qtyInput')?.value) || 1;
     let price = currentItem.price;
     let total = qty * price;
-
-    // Скидка 5% от 500 г (для Вкусняшек)
     let discount = 0;
-    if (currentItem.category === 'Вкусняшки' && qty >= 5) {
-      discount = 0.05;
+    let discountText = '';
+
+    if (currentItem.category === 'Передержка') {
+      const inD = new Date(document.getElementById('checkIn').value);
+      const outD = new Date(document.getElementById('checkOut').value);
+      if (isNaN(inD) || isNaN(outD)) return;
+
+      qty = Math.max(1, Math.ceil((outD - inD) / (1000 * 60 * 60 * 24)));
+      total = qty * price;
+      discount = qty >= 10 ? 0.1 : 0;
+      discountText = discount ? 'Скидка 10% за 10+ суток!' : '';
+    } else if (currentItem.category === 'Вкусняшки') {
+      discount = qty >= 5 ? 0.05 : 0;
+      discountText = discount ? 'Скидка 5% от 500 грамм!' : '';
     }
 
     let final = total * (1 - discount);
 
     document.getElementById('qtyDisplay').textContent = qty;
     document.getElementById('calcPrice').textContent = final.toFixed(0) + ' ₽';
-
-    const discEl = document.getElementById('discountBlock');
-    if (discount > 0) {
-      discEl.textContent = 'Скидка 5% от 500 грамм!';
-      discEl.style.display = 'block';
-    } else {
-      discEl.style.display = 'none';
-    }
+    document.getElementById('discountBlock').textContent = discountText;
   }
 
   function changeQty(delta) {
-    let input = document.getElementById('qtyInput');
+    const input = document.getElementById('qtyInput');
     let v = parseInt(input.value) || 1;
     input.value = Math.max(1, v + delta);
     updateCalc();
@@ -448,14 +295,22 @@
   function addToCartFromCalc() {
     if (!currentItem) return;
 
-    let qty = parseInt(document.getElementById('qtyInput').value) || 1;
+    let qty = parseInt(document.getElementById('qtyInput')?.value) || 1;
 
-    const exist = cart.find(e => e.sub === currentItem.sub);
-    if (exist) {
-      exist.quantity += qty;
-    } else {
-      cart.push({ ...currentItem, quantity: qty });
+    if (currentItem.category === 'Передержка') {
+      qty = parseInt(document.getElementById('qtyDisplay').textContent);
     }
+
+    const entry = {
+      product: currentItem,
+      quantity: qty,
+      checkIn: currentItem.category === 'Передержка' ? document.getElementById('checkIn').value : null,
+      checkOut: currentItem.category === 'Передержка' ? document.getElementById('checkOut').value : null
+    };
+
+    const exist = cart.find(e => e.product.id === currentItem.id);
+    if (exist) exist.quantity += qty;
+    else cart.push(entry);
 
     tg.showPopup({message: `Добавлено: ${qty} × ${currentItem.sub}`});
     updateCart();
@@ -465,34 +320,38 @@
 
   function renderCartList() {
     const list = document.getElementById('cartList');
-    list.innerHTML = cart.length === 0 ? '<p style="text-align:center;color:#999;">Корзина пуста</p>' : '';
+    list.innerHTML = cart.length === 0 ? '<p style="text-align:center;color:var(--gray);">Корзина пуста</p>' : '';
 
     cart.forEach(item => {
       const div = document.createElement('div');
       div.className = 'cart-item';
+      let title = item.product.sub;
+      let details = `${item.quantity} шт.`;
+      if (item.checkIn) details = `${item.quantity} сут. (${item.checkIn} → ${item.checkOut})`;
       div.innerHTML = `
-        <div class="cart-item-title">${item.sub}</div>
-        <div>${item.quantity} шт. × ${item.price} ₽</div>
-        <div class="price">${(item.quantity * item.price).toFixed(0)} ₽</div>
+        <div class="cart-item-title">${title}</div>
+        <div class="cart-item-details">${details}</div>
+        <span class="cart-item-total">${(item.quantity * item.product.price).toFixed(0)} ₽</span>
       `;
       list.appendChild(div);
     });
   }
 
   function updateCart() {
-    let count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    let total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    let count = cart.reduce((s, e) => s + e.quantity, 0);
+    let total = cart.reduce((s, e) => s + e.quantity * e.product.price, 0);
 
     document.getElementById('cartCount').textContent = count;
     document.getElementById('cartTotal').textContent = total.toFixed(0) + ' ₽';
     document.getElementById('cart-bar').classList.toggle('hidden', count === 0);
+    renderCartList();
   }
 
   function clearCart() {
     if (confirm('Очистить корзину?')) {
       cart = [];
       updateCart();
-      renderCartList();
+      tg.showPopup({message: 'Корзина очищена'});
     }
   }
 
@@ -510,16 +369,21 @@
   }
 
   function sendOrder() {
-    let text = 'Заказ ZooGrand73\n\n';
+    const comment = document.getElementById('orderComment').value.trim();
+    let text = 'Новый заказ ZooGrand73\n\n';
+
     cart.forEach(item => {
-      text += `${item.sub} × ${item.quantity} = ${item.quantity * item.price} ₽\n`;
+      let line = `${item.product.sub} × ${item.quantity}`;
+      if (item.checkIn) line += ` (${item.checkIn} → ${item.checkOut})`;
+      text += line + '\n';
     });
-    let total = cart.reduce((s, e) => s + e.quantity * e.price, 0);
-    text += `\nИтого: ${total} ₽\n\n`;
-    text += document.getElementById('orderComment').value.trim();
+
+    let sum = cart.reduce((s, e) => s + e.quantity * e.product.price, 0);
+    text += `\nИтого: ${sum} ₽`;
+    if (comment) text += `\n\nКомментарий:\n${comment}`;
 
     tg.sendData(text);
-    tg.showAlert('Заказ отправлен!');
+    tg.showAlert('Заказ отправлен администратору!');
     cart = [];
     updateCart();
     closeOrderModal();
