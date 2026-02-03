@@ -2,181 +2,80 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ZooGrand73</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 body{margin:0;font-family:system-ui;background:#f6f7f9}
-header{
-background:linear-gradient(135deg,#ff9800,#ffb347);
-color:#fff;padding:14px;text-align:center
-}
-header img{height:40px;margin-bottom:6px}
-.container{padding:14px;padding-bottom:160px}
-
-.card{
-background:#fff;padding:16px;border-radius:18px;
-margin-bottom:14px;box-shadow:0 8px 24px #0002
-}
-
-h3{margin-top:0}
-button{
-background:#ff9800;border:none;color:#fff;
-padding:12px;border-radius:14px;font-weight:800;width:100%
-}
-input,textarea,select{
-width:100%;padding:12px;border-radius:14px;
-border:1px solid #ddd;margin-bottom:10px
-}
-.price{font-size:1.3rem;font-weight:800;text-align:right}
-.badge{
-display:inline-block;background:#fff3e0;color:#e65100;
-padding:6px 10px;border-radius:999px;font-size:.8rem;margin-bottom:6px
-}
-.product{
-border:1px dashed #ddd;border-radius:14px;
-padding:12px;margin-bottom:10px
-}
+header{text-align:center;padding:14px;background:#fff;box-shadow:0 4px 20px #0001}
+.container{padding:14px;padding-bottom:120px}
+.card{background:#fff;padding:14px;border-radius:18px;margin-bottom:12px;box-shadow:0 6px 20px #0002}
+button{width:100%;padding:14px;border-radius:14px;border:none;background:#ff9800;color:#fff;font-weight:800}
+.price{font-size:1.2rem;font-weight:800;text-align:right}
 </style>
 </head>
 
 <body>
 
 <header>
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg">
-<div><b>ZooGrand73</b><br>Передержка • Товары 🐾</div>
+  <img src="logo.png" height="48"><br>
+  <small>забота • уют • доверие</small>
 </header>
 
-<div class="container">
+<div class="container" id="items"></div>
 
 <div class="card">
-<span class="badge">Почему нам доверяют</span>
-<ul>
-<li>🏡 Домашняя передержка</li>
-<li>📸 Фото-отчёты</li>
-<li>🐕 Опыт с крупными породами</li>
-<li>❤️ Забота и внимание</li>
-</ul>
-</div>
-
-<!-- ПЕРЕДЕРЖКА -->
-<div class="card">
-<h3>🐶 Передержка</h3>
-
-<select id="dogType" onchange="calcTotal()">
-<option value="">Категория собаки</option>
-<option value="mini">Мини / Той</option>
-<option value="small">Маленькие</option>
-<option value="mid">Средние</option>
-<option value="big">Крупные</option>
-</select>
-
-<input type="number" id="days" value="1" min="1" onchange="calcTotal()">
-</div>
-
-<!-- ЛЕЖАНКИ -->
-<div class="card">
-<h3>🛏 Лежанки</h3>
-
-<div class="product">
-<b>Лежанка «Эконом»</b><br>
-Для собак до 15 кг, мягкая, лёгкая<br>
-<b>800 ₽</b><br>
-<button onclick="addItem('Лежанка Эконом',800)">В корзину</button>
-</div>
-</div>
-
-<!-- ВКУСНЯШКИ -->
-<div class="card">
-<h3>🦴 Вкусняшки</h3>
-
-<div class="product">
-<b>Лёгкое говяжье</b><br>
-<select onchange="addTreat('Лёгкое говяжье',100,this.value)">
-<option value="">Выбрать вес</option>
-<option value="100">100 г</option>
-<option value="250">250 г</option>
-<option value="500">500 г</option>
-</select>
-</div>
-
-<div class="product">
-<b>Рубец говяжий</b><br>
-<select onchange="addTreat('Рубец говяжий',100,this.value)">
-<option value="">Выбрать вес</option>
-<option value="100">100 г</option>
-<option value="250">250 г</option>
-<option value="500">500 г</option>
-</select>
-</div>
-</div>
-
-<!-- ДАННЫЕ -->
-<div class="card">
-<h3>🐕 Питомец</h3>
-<input id="petName" placeholder="Кличка">
-<input id="petBreed" placeholder="Порода">
-</div>
-
-<div class="card">
-<h3>🏠 Адрес</h3>
-<input id="address" placeholder="Адрес">
-</div>
-
-<div class="card">
-<h3>💬 Комментарий</h3>
-<textarea id="comment"></textarea>
-</div>
-
-<div class="card">
-<div class="price" id="total">Итого: —</div>
+<div class="price" id="total">Итого: 0 ₽</div>
 <button onclick="sendOrder()">🛒 Оформить заказ</button>
 </div>
 
-</div>
-
 <script>
-const tg = window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();}
+const tg = window.Telegram.WebApp;
+tg.ready(); tg.expand();
 
 let cart=[];
-const stayPrices={mini:650,small:900,mid:1300,big:1900};
+let products={};
 
-function calcTotal(){
-cart=cart.filter(i=>!i.stay);
-if(dogType.value){
-cart.push({
-name:"Передержка",
-price:stayPrices[dogType.value]*days.value,
-stay:true
+fetch("products.json")
+.then(r=>r.json())
+.then(data=>{
+ products=data;
+ render();
 });
-}
-render();
-}
-
-function addItem(name,price){
-cart.push({name,price});
-render();
-}
-
-function addTreat(name,price,g){
-if(!g)return;
-cart.push({name:`${name} ${g}г`,price:price*(g/100)});
-render();
-}
 
 function render(){
-let sum=cart.reduce((a,b)=>a+b.price,0);
-total.innerText="Итого: "+sum+" ₽";
+ let box=document.getElementById("items");
+ box.innerHTML="";
+ Object.keys(products).forEach(cat=>{
+  box.innerHTML+=`<h3>${cat}</h3>`;
+  products[cat].forEach(p=>{
+   box.innerHTML+=`
+   <div class="card">
+    <b>${p.name}</b><br>
+    ${p.desc}<br>
+    ${p.price} ₽
+    <button onclick="add('${p.name}',${p.price})">В корзину</button>
+   </div>`;
+  });
+ });
+}
+
+function add(name,price){
+ cart.push({name,price});
+ calc();
+}
+
+function calc(){
+ let sum=cart.reduce((s,i)=>s+i.price,0);
+ total.innerText="Итого: "+sum+" ₽";
 }
 
 function sendOrder(){
-let msg="🐾 ЗАКАЗ ZooGrand73\n\n";
-cart.forEach((i,n)=>msg+=`${n+1}. ${i.name} — ${i.price} ₽\n`);
-msg+=`\n🐕 ${petName.value}\n📦 ${petBreed.value}\n🏠 ${address.value}\n💬 ${comment.value}\n\n${total.innerText}`;
-
-tg ? tg.sendData(msg) : alert(msg);
+ let text="🐾 Заказ ZooGrand73\n\n";
+ cart.forEach((i,n)=>text+=`${n+1}. ${i.name} — ${i.price} ₽\n`);
+ text+=`\n${total.innerText}`;
+ tg.sendData(text);
 }
 </script>
 
