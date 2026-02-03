@@ -4,218 +4,180 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZooGrand73</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{margin:0;font-family:system-ui;background:#f4f5f7}
-header{background:linear-gradient(135deg,#ff9800,#ffb347);color:#fff;padding:14px;text-align:center;font-size:1.4rem;font-weight:800}
-.container{padding:14px;padding-bottom:220px}
-
-.banner{
-    height:220px;border-radius:0 0 22px 22px;
-    background:url("https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg") center/cover;
-    display:flex;align-items:center;justify-content:center;color:#fff;
+body{margin:0;font-family:system-ui;background:#f6f7f9}
+header{
+background:linear-gradient(135deg,#ff9800,#ffb347);
+color:#fff;padding:14px;text-align:center
 }
-.banner h1{text-shadow:0 4px 12px #000}
+header img{height:40px;margin-bottom:6px}
+.container{padding:14px;padding-bottom:160px}
 
-.categories{display:flex;gap:14px;justify-content:center;margin-top:20px}
-.cat{background:#fff;width:110px;border-radius:18px;text-align:center;padding:14px;box-shadow:0 6px 20px #0002;cursor:pointer}
-.cat img{width:60px;height:60px;object-fit:contain}
-
-.hidden{display:none}
-.card{background:#fff;padding:14px;border-radius:18px;margin-bottom:12px;box-shadow:0 6px 20px #0002}
-
-button{background:#ff9800;border:none;color:#fff;padding:10px 14px;border-radius:12px;font-weight:700}
-
-input,textarea,select{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin-bottom:8px}
-
-#cartBlock{
-    position:fixed;bottom:0;left:0;right:0;
-    background:#fff;border-radius:20px 20px 0 0;
-    box-shadow:0 -6px 20px #0003;padding:14px;z-index:100
+.card{
+background:#fff;padding:16px;border-radius:18px;
+margin-bottom:14px;box-shadow:0 8px 24px #0002
 }
 
-.cart-item{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:8px;border-bottom:1px dashed #ddd;
-    touch-action:pan-y;
+h3{margin-top:0}
+button{
+background:#ff9800;border:none;color:#fff;
+padding:12px;border-radius:14px;font-weight:800;width:100%
 }
-
-.qty button{background:#eee;color:#333;padding:4px 8px;margin:0 4px}
-.total{font-weight:800;font-size:1.2rem;text-align:right}
+input,textarea,select{
+width:100%;padding:12px;border-radius:14px;
+border:1px solid #ddd;margin-bottom:10px
+}
+.price{font-size:1.3rem;font-weight:800;text-align:right}
+.badge{
+display:inline-block;background:#fff3e0;color:#e65100;
+padding:6px 10px;border-radius:999px;font-size:.8rem;margin-bottom:6px
+}
+.product{
+border:1px dashed #ddd;border-radius:14px;
+padding:12px;margin-bottom:10px
+}
 </style>
 </head>
 
 <body>
 
-<header>ZooGrand73 • Ульяновск</header>
+<header>
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg">
+<div><b>ZooGrand73</b><br>Передержка • Товары 🐾</div>
+</header>
 
 <div class="container">
 
-<div class="banner">
-<h1>Счастливые питомцы<br>— счастливая семья 🐾</h1>
+<div class="card">
+<span class="badge">Почему нам доверяют</span>
+<ul>
+<li>🏡 Домашняя передержка</li>
+<li>📸 Фото-отчёты</li>
+<li>🐕 Опыт с крупными породами</li>
+<li>❤️ Забота и внимание</li>
+</ul>
 </div>
 
-<div id="main">
-<div class="categories">
-<div class="cat" onclick="openCategory('Лежанки')">
-<img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">Лежанки
+<!-- ПЕРЕДЕРЖКА -->
+<div class="card">
+<h3>🐶 Передержка</h3>
+
+<select id="dogType" onchange="calcTotal()">
+<option value="">Категория собаки</option>
+<option value="mini">Мини / Той</option>
+<option value="small">Маленькие</option>
+<option value="mid">Средние</option>
+<option value="big">Крупные</option>
+</select>
+
+<input type="number" id="days" value="1" min="1" onchange="calcTotal()">
 </div>
-<div class="cat" onclick="openCategory('Передержка')">
-<img src="https://cdn-icons-png.flaticon.com/512/194/194279.png">Передержка
-</div>
-<div class="cat" onclick="openCategory('Вкусняшки')">
-<img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">Вкусняшки
-</div>
+
+<!-- ЛЕЖАНКИ -->
+<div class="card">
+<h3>🛏 Лежанки</h3>
+
+<div class="product">
+<b>Лежанка «Эконом»</b><br>
+Для собак до 15 кг, мягкая, лёгкая<br>
+<b>800 ₽</b><br>
+<button onclick="addItem('Лежанка Эконом',800)">В корзину</button>
 </div>
 </div>
 
-<div id="catalog" class="hidden">
-<button onclick="back()">← Назад</button>
-<h2 id="title"></h2>
-<div id="items"></div>
+<!-- ВКУСНЯШКИ -->
+<div class="card">
+<h3>🦴 Вкусняшки</h3>
 
+<div class="product">
+<b>Лёгкое говяжье</b><br>
+<select onchange="addTreat('Лёгкое говяжье',100,this.value)">
+<option value="">Выбрать вес</option>
+<option value="100">100 г</option>
+<option value="250">250 г</option>
+<option value="500">500 г</option>
+</select>
+</div>
+
+<div class="product">
+<b>Рубец говяжий</b><br>
+<select onchange="addTreat('Рубец говяжий',100,this.value)">
+<option value="">Выбрать вес</option>
+<option value="100">100 г</option>
+<option value="250">250 г</option>
+<option value="500">500 г</option>
+</select>
+</div>
+</div>
+
+<!-- ДАННЫЕ -->
+<div class="card">
 <h3>🐕 Питомец</h3>
 <input id="petName" placeholder="Кличка">
 <input id="petBreed" placeholder="Порода">
+</div>
 
+<div class="card">
 <h3>🏠 Адрес</h3>
 <input id="address" placeholder="Адрес">
+</div>
 
-<h3>📅 Передержка</h3>
-<input type="date" id="startDate">
-<input type="number" id="days" placeholder="Кол-во суток" value="1">
-
+<div class="card">
 <h3>💬 Комментарий</h3>
 <textarea id="comment"></textarea>
 </div>
 
+<div class="card">
+<div class="price" id="total">Итого: —</div>
+<button onclick="sendOrder()">🛒 Оформить заказ</button>
 </div>
 
-<div id="cartBlock" class="hidden">
-<div id="cartItems"></div>
-<div class="total">Итого: <span id="total">0 ₽</span></div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand();
+const tg = window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
 
-tg.MainButton.setText("🛒 Оформить заказ");
-tg.MainButton.color = "#ff9800";
+let cart=[];
+const stayPrices={mini:650,small:900,mid:1300,big:1900};
 
-let cartData = [];
-const cartBlock = document.getElementById("cartBlock");
-
-const products = {
-Лежанки:[{name:"Лежанка Эконом",price:800},{name:"Лежанка Премиум",price:1500}],
-Передержка:[{name:"Передержка",price:1200}],
-Вкусняшки:[{name:"Легкое говяжье",price:100},{name:"Рубец говяжий",price:100}]
-};
-
-function openCategory(cat){
-main.classList.add("hidden");
-catalog.classList.remove("hidden");
-title.innerText = cat;
-items.innerHTML="";
-
-products[cat].forEach(p=>{
-let el=document.createElement("div");
-el.className="card";
-
-if(cat==="Вкусняшки"){
-el.innerHTML=`<b>${p.name}</b>
-<select onchange="addTreat('${p.name}',${p.price},this.value)">
-<option value="">Граммы</option>
-<option value="100">100 г</option>
-<option value="250">250 г</option>
-<option value="500">500 г</option>
-</select>`;
-}else if(cat==="Передержка"){
-el.innerHTML=`<b>${p.name}</b><br>${p.price} ₽/сутки
-<button onclick="addStay(${p.price})">В корзину</button>`;
-}else{
-el.innerHTML=`<b>${p.name}</b><br>${p.price} ₽
-<button onclick="addItem('${p.name}',${p.price})">В корзину</button>`;
-}
-items.appendChild(el);
+function calcTotal(){
+cart=cart.filter(i=>!i.stay);
+if(dogType.value){
+cart.push({
+name:"Передержка",
+price:stayPrices[dogType.value]*days.value,
+stay:true
 });
 }
-
-function back(){catalog.classList.add("hidden");main.classList.remove("hidden");}
-
-function addItem(name,price){
-cartData.push({name,price,qty:1});
-renderCart();
+render();
 }
 
-function addStay(price){
-let d=Number(days.value)||1;
-cartData.push({name:`Передержка (${d} суток)`,price:price*d,qty:1});
-renderCart();
+function addItem(name,price){
+cart.push({name,price});
+render();
 }
 
 function addTreat(name,price,g){
 if(!g)return;
-cartData.push({name:`${name} (${g} г)`,price:price*(g/100),qty:1});
-renderCart();
+cart.push({name:`${name} ${g}г`,price:price*(g/100)});
+render();
 }
 
-function renderCart(){
-cartItems.innerHTML="";
-let sum=0;
-
-cartData.forEach((i,idx)=>{
-sum+=i.price*i.qty;
-let div=document.createElement("div");
-div.className="cart-item";
-div.innerHTML=`<div>${i.name}</div>
-<div class="qty">
-<button onclick="changeQty(${idx},-1)">−</button>${i.qty}
-<button onclick="changeQty(${idx},1)">+</button>
-</div>`;
-enableSwipe(div,idx);
-cartItems.appendChild(div);
-});
-
-if(days.value>10) sum*=0.9;
-total.innerText=Math.round(sum)+" ₽";
-
-if(cartData.length){
-cartBlock.classList.remove("hidden");
-tg.MainButton.show();
-}else{
-cartBlock.classList.add("hidden");
-tg.MainButton.hide();
-}
+function render(){
+let sum=cart.reduce((a,b)=>a+b.price,0);
+total.innerText="Итого: "+sum+" ₽";
 }
 
-function changeQty(i,d){
-cartData[i].qty+=d;
-if(cartData[i].qty<=0) cartData.splice(i,1);
-renderCart();
-}
+function sendOrder(){
+let msg="🐾 ЗАКАЗ ZooGrand73\n\n";
+cart.forEach((i,n)=>msg+=`${n+1}. ${i.name} — ${i.price} ₽\n`);
+msg+=`\n🐕 ${petName.value}\n📦 ${petBreed.value}\n🏠 ${address.value}\n💬 ${comment.value}\n\n${total.innerText}`;
 
-function enableSwipe(el,idx){
-let startX=0;
-el.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-el.addEventListener("touchend",e=>{
-if(startX-e.changedTouches[0].clientX>80){
-cartData.splice(idx,1);
-renderCart();
+tg ? tg.sendData(msg) : alert(msg);
 }
-});
-}
-
-days.addEventListener("input",()=>renderCart());
-
-tg.MainButton.onClick(()=>{
-let msg="🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n";
-cartData.forEach((i,n)=>msg+=`${n+1}. ${i.name} × ${i.qty}\n`);
-msg+=`\n🐕 ${petName.value}\n🏠 ${address.value}\n📅 ${startDate.value} | ${days.value} суток\n💬 ${comment.value}\n\n💰 ${total.innerText}`;
-tg.sendData(msg);
-});
 </script>
 
 </body>
