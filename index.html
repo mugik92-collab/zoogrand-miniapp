@@ -8,115 +8,42 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{
-    margin:0;
-    font-family:system-ui;
-    background:#f4f5f7;
-}
-header{
-    background:linear-gradient(135deg,#ff9800,#ffb347);
-    color:#fff;
-    padding:14px;
-    text-align:center;
-    font-size:1.4rem;
-    font-weight:800;
-}
-.container{padding:14px;padding-bottom:200px}
+body{margin:0;font-family:system-ui;background:#f4f5f7}
+header{background:linear-gradient(135deg,#ff9800,#ffb347);color:#fff;padding:14px;text-align:center;font-size:1.4rem;font-weight:800}
+.container{padding:14px;padding-bottom:220px}
 
 .banner{
-    height:220px;
-    border-radius:0 0 22px 22px;
-    background:url("https://images.unsplash.com/photo-1601758173925-196ea9f3b2f5?q=80&w=1200") center/cover;
-    box-shadow:0 8px 25px #0003;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    text-align:center;
+    height:220px;border-radius:0 0 22px 22px;
+    background:url("https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg") center/cover;
+    display:flex;align-items:center;justify-content:center;color:#fff;
 }
-.banner h1{
-    font-size:2rem;
-    text-shadow:0 4px 12px #000;
-}
+.banner h1{text-shadow:0 4px 12px #000}
 
-.categories{
-    display:flex;
-    gap:14px;
-    justify-content:center;
-    margin-top:20px;
-}
-.cat{
-    background:#fff;
-    width:110px;
-    border-radius:18px;
-    text-align:center;
-    padding:14px;
-    box-shadow:0 6px 20px #0002;
-    cursor:pointer;
-}
-.cat img{
-    width:60px;
-    height:60px;
-    object-fit:contain;
-    margin-bottom:6px;
-}
+.categories{display:flex;gap:14px;justify-content:center;margin-top:20px}
+.cat{background:#fff;width:110px;border-radius:18px;text-align:center;padding:14px;box-shadow:0 6px 20px #0002;cursor:pointer}
+.cat img{width:60px;height:60px;object-fit:contain}
 
 .hidden{display:none}
+.card{background:#fff;padding:14px;border-radius:18px;margin-bottom:12px;box-shadow:0 6px 20px #0002}
 
-.card{
-    background:#fff;
-    padding:14px;
-    border-radius:18px;
-    margin-bottom:12px;
-    box-shadow:0 6px 20px #0002;
+button{background:#ff9800;border:none;color:#fff;padding:10px 14px;border-radius:12px;font-weight:700}
+
+input,textarea,select{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;margin-bottom:8px}
+
+#cartBlock{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-radius:20px 20px 0 0;
+    box-shadow:0 -6px 20px #0003;padding:14px;z-index:100
 }
 
-button{
-    background:#ff9800;
-    border:none;
-    color:#fff;
-    padding:10px 14px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-input,textarea,select{
-    width:100%;
-    padding:10px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    margin-bottom:8px;
-}
-
-#cart{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    background:#fff;
-    border-radius:20px 20px 0 0;
-    box-shadow:0 -6px 20px #0003;
-    padding:14px;
-    z-index:100;
-}
 .cart-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:6px;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px;border-bottom:1px dashed #ddd;
+    touch-action:pan-y;
 }
-.qty button{
-    background:#eee;
-    color:#333;
-    padding:4px 8px;
-    margin:0 4px;
-}
-.total{
-    font-weight:800;
-    font-size:1.2rem;
-    text-align:right;
-}
+
+.qty button{background:#eee;color:#333;padding:4px 8px;margin:0 4px}
+.total{font-weight:800;font-size:1.2rem;text-align:right}
 </style>
 </head>
 
@@ -127,58 +54,48 @@ input,textarea,select{
 <div class="container">
 
 <div class="banner">
-    <h1>Счастливые питомцы<br>— счастливая семья 🐾</h1>
+<h1>Счастливые питомцы<br>— счастливая семья 🐾</h1>
 </div>
 
-<!-- ГЛАВНЫЙ ЭКРАН -->
 <div id="main">
-    <div class="categories">
-        <div class="cat" onclick="openCategory('Лежанки')">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">
-            Лежанки
-        </div>
-        <div class="cat" onclick="openCategory('Передержка')">
-            <img src="https://cdn-icons-png.flaticon.com/512/194/194279.png">
-            Передержка
-        </div>
-        <div class="cat" onclick="openCategory('Вкусняшки')">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
-            Вкусняшки
-        </div>
-    </div>
+<div class="categories">
+<div class="cat" onclick="openCategory('Лежанки')">
+<img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">Лежанки
+</div>
+<div class="cat" onclick="openCategory('Передержка')">
+<img src="https://cdn-icons-png.flaticon.com/512/194/194279.png">Передержка
+</div>
+<div class="cat" onclick="openCategory('Вкусняшки')">
+<img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">Вкусняшки
+</div>
+</div>
 </div>
 
-<!-- КАТАЛОГ -->
 <div id="catalog" class="hidden">
-    <button onclick="back()">← Назад</button>
-    <h2 id="title"></h2>
-    <div id="items"></div>
+<button onclick="back()">← Назад</button>
+<h2 id="title"></h2>
+<div id="items"></div>
 
-    <h3>🐕 Питомец</h3>
-    <input id="petName" placeholder="Кличка">
-    <input id="petBreed" placeholder="Порода">
+<h3>🐕 Питомец</h3>
+<input id="petName" placeholder="Кличка">
+<input id="petBreed" placeholder="Порода">
 
-    <h3>🏠 Адрес</h3>
-    <input id="address" placeholder="Адрес">
+<h3>🏠 Адрес</h3>
+<input id="address" placeholder="Адрес">
 
-    <h3>📅 Передержка</h3>
-    <input type="date" id="startDate">
-    <input type="number" id="days" placeholder="Кол-во суток">
-    <div style="display:flex;gap:6px">
-        <input type="time" id="checkIn">
-        <input type="time" id="checkOut">
-    </div>
+<h3>📅 Передержка</h3>
+<input type="date" id="startDate">
+<input type="number" id="days" placeholder="Кол-во суток" value="1">
 
-    <h3>🧾 Комментарий</h3>
-    <textarea id="comment"></textarea>
+<h3>💬 Комментарий</h3>
+<textarea id="comment"></textarea>
 </div>
 
 </div>
 
-<!-- КОРЗИНА -->
-<div id="cart" class="hidden">
-    <div id="cartItems"></div>
-    <div class="total">Итого: <span id="total">0 ₽</span></div>
+<div id="cartBlock" class="hidden">
+<div id="cartItems"></div>
+<div class="total">Итого: <span id="total">0 ₽</span></div>
 </div>
 
 <script>
@@ -187,118 +104,117 @@ tg.ready(); tg.expand();
 
 tg.MainButton.setText("🛒 Оформить заказ");
 tg.MainButton.color = "#ff9800";
-tg.MainButton.textColor = "#ffffff";
 
-let cart = [];
+let cartData = [];
+const cartBlock = document.getElementById("cartBlock");
 
 const products = {
-    "Лежанки":[
-        {name:"Лежанка Эконом",price:800},
-        {name:"Лежанка Премиум",price:1500}
-    ],
-    "Передержка":[
-        {name:"Передержка (сутки)",price:1200}
-    ],
-    "Вкусняшки":[
-        {name:"Легкое говяжье",price:100},
-        {name:"Рубец говяжий",price:100}
-    ]
+Лежанки:[{name:"Лежанка Эконом",price:800},{name:"Лежанка Премиум",price:1500}],
+Передержка:[{name:"Передержка",price:1200}],
+Вкусняшки:[{name:"Легкое говяжье",price:100},{name:"Рубец говяжий",price:100}]
 };
 
 function openCategory(cat){
-    main.classList.add("hidden");
-    catalog.classList.remove("hidden");
-    title.innerText = cat;
-    items.innerHTML = "";
+main.classList.add("hidden");
+catalog.classList.remove("hidden");
+title.innerText = cat;
+items.innerHTML="";
 
-    products[cat].forEach(p=>{
-        let el=document.createElement("div");
-        el.className="card";
+products[cat].forEach(p=>{
+let el=document.createElement("div");
+el.className="card";
 
-        if(cat==="Вкусняшки"){
-            el.innerHTML=`
-                <b>${p.name}</b>
-                <select onchange="addTreat('${p.name}',${p.price},this.value)">
-                    <option value="">Выбрать граммы</option>
-                    <option value="100">100 г</option>
-                    <option value="250">250 г</option>
-                    <option value="500">500 г</option>
-                </select>`;
-        }else{
-            el.innerHTML=`
-                <b>${p.name}</b><br>${p.price} ₽
-                <button onclick="addItem('${p.name}',${p.price})">В корзину</button>`;
-        }
-        items.appendChild(el);
-    });
+if(cat==="Вкусняшки"){
+el.innerHTML=`<b>${p.name}</b>
+<select onchange="addTreat('${p.name}',${p.price},this.value)">
+<option value="">Граммы</option>
+<option value="100">100 г</option>
+<option value="250">250 г</option>
+<option value="500">500 г</option>
+</select>`;
+}else if(cat==="Передержка"){
+el.innerHTML=`<b>${p.name}</b><br>${p.price} ₽/сутки
+<button onclick="addStay(${p.price})">В корзину</button>`;
+}else{
+el.innerHTML=`<b>${p.name}</b><br>${p.price} ₽
+<button onclick="addItem('${p.name}',${p.price})">В корзину</button>`;
+}
+items.appendChild(el);
+});
 }
 
-function back(){
-    catalog.classList.add("hidden");
-    main.classList.remove("hidden");
-}
+function back(){catalog.classList.add("hidden");main.classList.remove("hidden");}
 
 function addItem(name,price){
-    cart.push({name,price,qty:1});
-    renderCart();
+cartData.push({name,price,qty:1});
+renderCart();
 }
 
-function addTreat(name,price,grams){
-    if(!grams) return;
-    cart.push({
-        name:`${name} (${grams} г)`,
-        price:price*(grams/100),
-        qty:1
-    });
-    renderCart();
+function addStay(price){
+let d=Number(days.value)||1;
+cartData.push({name:`Передержка (${d} суток)`,price:price*d,qty:1});
+renderCart();
+}
+
+function addTreat(name,price,g){
+if(!g)return;
+cartData.push({name:`${name} (${g} г)`,price:price*(g/100),qty:1});
+renderCart();
 }
 
 function renderCart(){
-    cartItems.innerHTML="";
-    let sum=0;
+cartItems.innerHTML="";
+let sum=0;
 
-    cart.forEach((i,idx)=>{
-        sum+=i.price*i.qty;
-        cartItems.innerHTML+=`
-        <div class="cart-item">
-            <div>${i.name}</div>
-            <div class="qty">
-                <button onclick="changeQty(${idx},-1)">−</button>
-                ${i.qty}
-                <button onclick="changeQty(${idx},1)">+</button>
-            </div>
-        </div>`;
-    });
+cartData.forEach((i,idx)=>{
+sum+=i.price*i.qty;
+let div=document.createElement("div");
+div.className="cart-item";
+div.innerHTML=`<div>${i.name}</div>
+<div class="qty">
+<button onclick="changeQty(${idx},-1)">−</button>${i.qty}
+<button onclick="changeQty(${idx},1)">+</button>
+</div>`;
+enableSwipe(div,idx);
+cartItems.appendChild(div);
+});
 
-    if(days.value>10) sum*=0.9;
+if(days.value>10) sum*=0.9;
+total.innerText=Math.round(sum)+" ₽";
 
-    total.innerText=Math.round(sum)+" ₽";
-    cart.classList.remove("hidden");
-    tg.MainButton.show();
+if(cartData.length){
+cartBlock.classList.remove("hidden");
+tg.MainButton.show();
+}else{
+cartBlock.classList.add("hidden");
+tg.MainButton.hide();
+}
 }
 
 function changeQty(i,d){
-    cart[i].qty+=d;
-    if(cart[i].qty<=0) cart.splice(i,1);
-    if(cart.length===0){
-        cart.classList.add("hidden");
-        tg.MainButton.hide();
-    }
-    renderCart();
+cartData[i].qty+=d;
+if(cartData[i].qty<=0) cartData.splice(i,1);
+renderCart();
 }
 
-tg.MainButton.onClick(()=>{
-    let msg="🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n";
-    cart.forEach((i,n)=>msg+=`${n+1}. ${i.name} × ${i.qty}\n`);
-    msg+=`
-🐕 ${petName.value}
-🏠 ${address.value}
-📅 ${startDate.value} | ${days.value} суток
-⏰ ${checkIn.value} – ${checkOut.value}
-💬 ${comment.value}
+function enableSwipe(el,idx){
+let startX=0;
+el.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+el.addEventListener("touchend",e=>{
+if(startX-e.changedTouches[0].clientX>80){
+cartData.splice(idx,1);
+renderCart();
+}
+});
+}
 
-💰 Итого: ${total.innerText}`;
-    tg.sendData(msg);
+days.addEventListener("input",()=>renderCart());
+
+tg.MainButton.onClick(()=>{
+let msg="🐾 НОВЫЙ ЗАКАЗ ZooGrand73\n\n";
+cartData.forEach((i,n)=>msg+=`${n+1}. ${i.name} × ${i.qty}\n`);
+msg+=`\n🐕 ${petName.value}\n🏠 ${address.value}\n📅 ${startDate.value} | ${days.value} суток\n💬 ${comment.value}\n\n💰 ${total.innerText}`;
+tg.sendData(msg);
 });
 </script>
 
